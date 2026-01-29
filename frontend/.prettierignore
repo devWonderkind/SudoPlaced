@@ -1,0 +1,8 @@
+# Ignore artifacts
+.next
+node_modules
+build
+dist
+public/**/*.svg
+public/**/*.png
+public/**/*.jpg
