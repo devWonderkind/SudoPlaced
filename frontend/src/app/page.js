@@ -1,17 +1,9 @@
 import React from 'react';
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { 
-  IconCalendarEvent, 
-  IconShare, 
-  IconLayoutKanban, 
-  IconBellRinging, 
-  IconNotes, 
-  IconTrophy 
-} from "@tabler/icons-react";
 import Navbar from "@/components/landing/nav";
 import Hero from "@/components/landing/hero";
+import Features from '@/components/landing/features';
+import HowItWorks from '@/components/landing/working';
+import Footer from '@/components/landing/footer';
 
 export default function LandingPage() {
   return (
@@ -23,14 +15,14 @@ export default function LandingPage() {
       <Hero />
 
       {/* --- Feature Grid --- */}
-      <section className="container mx-auto px-4 py-24">
-       
-      </section>
+      <Features />
 
-      {/* --- Final CTA --- */}
-      <footer className="py-20 text-center border-t border-neutral-800">
-        
-      </footer>
+      {/* --- How It Works --- */}
+      <HowItWorks />
+      
+      {/* --- Footer --- */}
+      <Footer />
+
     </div>
   );
 }

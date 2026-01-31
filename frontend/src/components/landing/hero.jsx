@@ -1,32 +1,74 @@
 "use client";
 
 import React from 'react';
+import { useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring, useMotionTemplate } from "framer-motion";
+import { gsap } from 'gsap';
+import { useGSAP } from '@gsap/react';
 
 export default function Hero() {
+  // hero text animation
+  const container = useRef(null);
+  
+  useGSAP(() => {
+    const scrambledText = 'ornagiedz';
+    const correctText = 'organized';
+    
+    const wrapper = container.current.querySelector('.scramble-wrapper');
+    
+    // Create initial scrambled letters
+    wrapper.innerHTML = scrambledText
+      .split('')
+      .map((char, index) => {
+        return `<span class="inline-block relative">
+          <span class="char-old inline-block">${char}</span>
+          <span class="char-new inline-block absolute left-0 top-0">${correctText[index]}</span>
+        </span>`;
+      })
+      .join('');
+
+    const tl = gsap.timeline({ delay: 0.5 });
+
+    // Animate each character
+    scrambledText.split('').forEach((char, index) => {
+      const charWrapper = wrapper.children[index];
+      const oldChar = charWrapper.querySelector('.char-old');
+      const newChar = charWrapper.querySelector('.char-new');
+
+      // Set initial positions
+      gsap.set(newChar, { y: -50, opacity: 0 });
+
+      // Animate at staggered timing
+      tl.to(oldChar, {
+        y: 50,
+        opacity: 0,
+        duration: 0.5,
+        ease: "power2.in"
+      }, index * 0.1)
+      .to(newChar, {
+        y: 0,
+        opacity: 1,
+        duration: 0.5,
+        ease: "power2.out"
+      }, index * 0.1);
+    });
+
+  }, { scope: container });
+
+  
   return (
     <section className="relative flex flex-col items-center justify-center px-4 pt-24 pb-24 md:pt-40 md:pb-32 text-center overflow-hidden">
       {/* Background Gradient Effect */}
       <div className="absolute inset-0 bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950 -z-10" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-cyan-500/10 rounded-full blur-3xl -z-10" />
 
-      {/* Badge */}
-      {/* <div className="mb-6 px-4 py-1.5 rounded-full border border-neutral-700 bg-neutral-900/50 backdrop-blur-sm flex items-center gap-2">
-        <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-        </span>
-        <span className="text-xs font-medium text-neutral-300 tracking-wide">
-          Get Early Access
-        </span>
-      </div> */}
-
       {/* Main Heading */}
+      <div ref={container}>
       <h1 className="max-w-6xl text-2xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight">
-        Your career journey, organized.
-       
+        Your career journey, <span className="scramble-wrapper inline-block">ornagiedz</span>
       </h1>
+    </div>
 
       {/* Subheading */}
       <p className="mt-6 max-w-3xl text-base sm:text-lg text-neutral-400">
@@ -64,7 +106,7 @@ export default function Hero() {
         >
           {/* Shine effect */}
           <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
-          <span className="relative">Join Waitlist</span>
+          <span className="relative">Get Early Access</span>
         </button>
       </div>
 
@@ -161,7 +203,7 @@ export default function Hero() {
             <img 
               src="/dashboard-prototype.png" 
               alt="Sudo Placed Dashboard Preview" 
-              className="w-full h-auto object-cover"
+              className="w-full h-auto object-cover "
             />
             
             {/* Bottom fade overlay */}
