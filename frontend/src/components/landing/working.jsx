@@ -73,6 +73,13 @@ export default function HowItWorks() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-24">
+          <motion.span 
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      className="text-blue-500 text-sm font-mono tracking-widest uppercase"
+                    >
+                      // How it works
+                    </motion.span>
           <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tighter mb-6">
             Four steps to <br />
             <span className="text-neutral-500">end the job search chaos.</span>

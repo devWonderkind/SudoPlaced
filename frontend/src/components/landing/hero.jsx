@@ -76,28 +76,28 @@ export default function Hero() {
       </p>
 
       {/* Waitlist Input */}
-      <div className="mt-6 relative flex items-center w-full max-w-lg
+      <div className="mt-6 relative flex flex-col sm:flex-row items-center w-full max-w-lg
         bg-white/5 backdrop-blur-md
         border border-white/10 
-        rounded-full
-        p-1.5
+        rounded-2xl sm:rounded-full
+        p-2 sm:p-1.5
+        gap-2 sm:gap-0
         transition-all duration-300">
         <input 
           type="email" 
           placeholder="Enter your email" 
-          className="flex-1 h-11 px-5 bg-transparent
+          className="w-full sm:flex-1 h-11 px-4 sm:px-5 bg-transparent
             text-white placeholder:text-neutral-500 
             focus:outline-none
-            text-base"
+            text-sm sm:text-base
+            text-center sm:text-left"
         />
         <button 
-          className="relative h-11 px-6 rounded-full whitespace-nowrap
+          className="relative w-full sm:w-auto h-11 px-5 sm:px-6 rounded-xl sm:rounded-full whitespace-nowrap
             bg-gradient-to-b from-white/95 via-white/85 to-white/75
             text-neutral-900 font-semibold text-sm
             border border-white/50
             shadow-[0_2px_16px_rgba(255,255,255,0.2),inset_0_1px_0_rgba(255,255,255,0.9),inset_0_-1px_0_rgba(0,0,0,0.1)]
-            hover:shadow-[0_4px_24px_rgba(255,255,255,0.3),inset_0_1px_0_rgba(255,255,255,1),inset_0_-1px_0_rgba(0,0,0,0.15)]
-            hover:from-white hover:via-white/95 hover:to-white/85
             active:scale-[0.98]
             transition-all duration-300 ease-out
             cursor-pointer
@@ -199,12 +199,34 @@ export default function Hero() {
             {/* Top reflection */}
             <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
             
-            {/* Dashboard image */}
+            {/* Dashboard image with blur */}
             <img 
               src="/dashboard-prototype.png" 
               alt="Sudo Placed Dashboard Preview" 
-              className="w-full h-auto object-cover "
+              className="w-full h-auto object-cover blur-[6px] sm:blur-[8px]"
             />
+            
+            {/* Coming Soon Overlay */}
+            <div className="absolute inset-0 flex items-center justify-center bg-neutral-950/30">
+              <div className="relative">
+                {/* Glow effect behind text */}
+                <div className="absolute inset-0 blur-3xl bg-gradient-to-r from-orange-500/40 via-pink-500/40 to-purple-500/40 scale-150" />
+                
+                {/* Main text container */}
+                <div className="relative px-4 sm:px-10 py-2 sm:py-4 rounded-2xl sm:rounded-3xl backdrop-blur-md">
+                  <span className="text-md sm:text-2xl md:text-xl lg:text-4xl font-bold tracking-tight bg-gradient-to-r from-white via-orange-200 to-white bg-clip-text text-transparent">
+                    Coming Soon
+                  </span>
+                  
+                  {/* Animated dots */}
+                  <span className="inline-flex ml-1 sm:ml-2">
+                    <span className="animate-pulse text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-orange-500" style={{ animationDelay: '0ms' }}>.</span>
+                    <span className="animate-pulse text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-orange-500" style={{ animationDelay: '200ms' }}>.</span>
+                    <span className="animate-pulse text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-orange-500" style={{ animationDelay: '400ms' }}>.</span>
+                  </span>
+                </div>
+              </div>
+            </div>
             
             {/* Bottom fade overlay */}
             <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-neutral-950 to-transparent" />
