@@ -77,7 +77,7 @@ export default function Features() {
   ];
 
   return (
-    <section className="bg-neutral-950 py-10 px-6">
+    <section id='features' className="bg-neutral-950 py-10 px-6">
       <div className="max-w-6xl mx-auto">
         {/* Aesthetic Header */}
         <div className="mb-20 space-y-4">
@@ -94,7 +94,7 @@ export default function Features() {
             className="text-4xl md:text-6xl text-white font-bold tracking-tighter"
           >
             Structure the grind. <br />
-            <span className="text-neutral-500 italic">Collect the win.</span>
+            <span className="text-neutral-500">Collect the win.</span>
           </motion.h2>
         </div>
 

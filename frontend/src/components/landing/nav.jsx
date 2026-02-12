@@ -1,7 +1,10 @@
 "use client";
 
 import React, { useState } from 'react';
+import Link from "next/link";
 import { IconTarget, IconMenu2, IconX } from '@tabler/icons-react';
+
+import { Button } from "@/components/ui/button";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,7 +18,7 @@ export default function Navbar() {
         {/* Logo */}
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 group cursor-pointer">
-            <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-orange-500 to-pink-600 rounded-full flex items-center justify-center transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-200">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-orange-500 to-pink-600 rounded-full flex items-center justify-center">
               <IconTarget className="w-4 h-4 sm:w-5 sm:h-5 text-white" stroke={2.5} />
             </div>
             <span className="font-bold text-base sm:text-lg tracking-tight text-white">
@@ -26,12 +29,18 @@ export default function Navbar() {
 
         {/* Desktop Navigation Links */}
         <div className="hidden md:flex items-center gap-1">
-          <a href="#features" className="px-4 py-2 text-neutral-300 hover:text-white hover:bg-white/10 rounded-full transition-all duration-200 text-sm font-medium">
+          <Link href="#features" className="px-4 py-2 text-neutral-300 hover:text-white hover:bg-white/10 rounded-full transition-all duration-200 text-sm font-medium">
             Features
-          </a>
-          <a href="#how-it-works" className="px-4 py-2 text-neutral-300 hover:text-white hover:bg-white/10 rounded-full transition-all duration-200 text-sm font-medium">
+          </Link>
+          <Link href="#how-it-works" className="px-4 py-2 text-neutral-300 hover:text-white hover:bg-white/10 rounded-full transition-all duration-200 text-sm font-medium">
             How It Works
-          </a>
+          </Link>
+          <Link href="/login" className='cursor-pointer'>
+            <Button>
+              Login
+            </Button>
+          </Link>
+    
         </div>
 
         {/* Mobile Menu Button */}
@@ -55,20 +64,26 @@ export default function Navbar() {
         }`}
       >
         <div className="flex flex-col px-4 py-4 gap-2">
-          <a 
+          <Link 
             href="#features" 
             onClick={() => setIsMenuOpen(false)}
             className="px-4 py-3 text-neutral-300 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-200 text-base font-medium"
           >
             Features
-          </a>
-          <a 
+          </Link>
+          <Link 
             href="#how-it-works" 
             onClick={() => setIsMenuOpen(false)}
             className="px-4 py-3 text-neutral-300 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-200 text-base font-medium"
           >
             How It Works
-          </a>
+          </Link>
+
+          <Link href="/login">
+            <Button>
+              Login
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

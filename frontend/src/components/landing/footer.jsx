@@ -71,7 +71,7 @@ export default function Footer() {
                 placeholder="Enter your email" 
                 className="w-full bg-neutral-900 border border-neutral-800 rounded-xl py-3 px-4 text-sm text-white focus:outline-none focus:border-blue-500 transition-colors"
               />
-              <button className="absolute right-2 top-1.5 bg-white text-black text-xs font-bold px-4 py-2.5 rounded-full hover:bg-neutral-200 transition-colors">
+              <button className="absolute right-2 top-1.5 bg-white text-black text-xs font-bold px-4 py-2.5 rounded-md hover:bg-neutral-200 transition-colors">
                 Join
               </button>
             </div>
