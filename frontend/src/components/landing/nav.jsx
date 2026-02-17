@@ -12,8 +12,8 @@ export default function Navbar() {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-neutral-950">
-      <nav className="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-neutral-800 w-full">
+    <div className="fixed top-0 left-0 right-0 z-50 bg-black/10 backdrop-blur-sm border border-neutral-800 max-w-4xl mx-auto my-2 rounded-full">
+      <nav className="flex items-center justify-between px-4 sm:px-6 py-3 w-full">
         
         {/* Logo */}
         <div className="flex items-center gap-2">
@@ -59,7 +59,7 @@ export default function Navbar() {
 
       {/* Mobile Navigation Drawer */}
       <div 
-        className={`md:hidden absolute top-full left-0 right-0 bg-neutral-950/95 backdrop-blur-lg border-b border-neutral-800 overflow-hidden transition-all duration-300 ease-out ${
+        className={`md:hidden absolute top-full left-0 right-0 bg-black/80 backdrop-blur-3xl border-b border-neutral-800 rounded-b-2xl rounded-t-none mx-5 overflow-hidden transition-all duration-300 ease-out ${
           isMenuOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
@@ -67,7 +67,8 @@ export default function Navbar() {
           <Link 
             href="#features" 
             onClick={() => setIsMenuOpen(false)}
-            className="px-4 py-3 text-neutral-300 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-200 text-base font-medium"
+            className="px-4 py-3 text-neutral-300 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-200 text-base font-medium
+            "
           >
             Features
           </Link>
