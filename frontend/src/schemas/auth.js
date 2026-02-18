@@ -18,3 +18,39 @@ export const SignupSchema = z.object({
   message: "Passwords don't match",
   path: ["re_password"],
 });
+
+export const ForgotPasswordSchema = z.object({
+  email,
+});
+
+export const ResetPasswordConfirmSchema = z
+  .object({
+    new_password: password,
+    re_new_password: z.string(),
+  })
+  .refine((data) => data.new_password === data.re_new_password, {
+    message: "Passwords don't match",
+    path: ["re_new_password"],
+  });
+
+export const ChangePasswordSchema = z
+  .object({
+    current_password: z.string().min(1, "Current password is required"),
+    new_password: password,
+    re_new_password: z.string(),
+  })
+  .refine((data) => data.new_password === data.re_new_password, {
+    message: "Passwords don't match",
+    path: ["re_new_password"],
+  });
+
+// For Google-only users who have no password yet
+export const SetInitialPasswordSchema = z
+  .object({
+    new_password: password,
+    re_new_password: z.string(),
+  })
+  .refine((data) => data.new_password === data.re_new_password, {
+    message: "Passwords don't match",
+    path: ["re_new_password"],
+  });

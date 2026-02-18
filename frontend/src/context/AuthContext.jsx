@@ -3,12 +3,17 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 // Centralized API imports
-import { 
-  fetchMe, 
-  loginUser, 
-  registerUser, 
-  logoutUser, 
-  googleLoginUser 
+import {
+  fetchMe,
+  loginUser,
+  registerUser,
+  logoutUser,
+  googleLoginUser,
+  changePassword as changePasswordApi,
+  setInitialPassword as setInitialPasswordApi,
+  updateProfile,
+  uploadProfilePic,
+  connectGoogleAccount,
 } from '@/api/auth';
 
 const AuthContext = createContext({});
@@ -59,6 +64,44 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Connect Google to an existing account (from profile page)
+  // Uses the dedicated endpoint that enforces email matching on the backend
+  const connectGoogle = async (accessToken) => {
+    try {
+      const res = await connectGoogleAccount(accessToken);
+      // Patch google_profile_pic into local user state immediately
+      setUser((prev) => ({
+        ...prev,
+        google_profile_pic: res.data.google_profile_pic,
+      }));
+      toast.success('Google account connected!');
+    } catch (err) {
+      const msg =
+        err.response?.data?.detail ||
+        'Failed to connect Google account. Make sure you select the Google account that matches your email here.';
+      toast.error(msg);
+    }
+  };
+
+  const changePassword = async (current_password, new_password, re_new_password) => {
+    await changePasswordApi(current_password, new_password, re_new_password);
+  };
+
+  const setInitialPassword = async (new_password, re_new_password) => {
+    await setInitialPasswordApi(new_password, re_new_password);
+    // After setting a password, refresh user so has_usable_password updates
+    const { data } = await fetchMe();
+    setUser(data);
+  };
+
+  const updateUser = async (formData, isMultipart = false) => {
+    const res = isMultipart
+      ? await uploadProfilePic(formData)
+      : await updateProfile(formData);
+    setUser(res.data);
+    return res;
+  };
+
   const logout = async () => {
     try {
       await logoutUser();
@@ -70,7 +113,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, login, signup, googleLogin, logout }}>
+    <AuthContext.Provider
+      value={{ user, setUser, loading, login, signup, googleLogin, connectGoogle, changePassword, setInitialPassword, updateUser, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

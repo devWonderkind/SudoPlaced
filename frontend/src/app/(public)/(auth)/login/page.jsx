@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LoginSchema, SignupSchema } from '@/schemas/auth';
+import { LoginSchema, SignupSchema, ForgotPasswordSchema } from '@/schemas/auth';
 import { useAuth } from '@/context/AuthContext';
 import { useGoogleLogin } from '@react-oauth/google';
 import { toast } from 'sonner';
@@ -20,37 +20,56 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { IconBrandGoogleFilled, IconEye, IconEyeOff } from '@tabler/icons-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { IconBrandGoogleFilled, IconEye, IconEyeOff, IconLoader2 } from '@tabler/icons-react';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
+import { requestPasswordReset } from '@/api/auth';
 
 export default function AuthPage() {
   const [activeTab, setActiveTab] = useState('login');
   const [showPassword, setShowPassword] = useState(false);
-  const { login, signup, googleLogin } = useAuth();
-
-  const { user, loading } = useAuth();
+  const [forgotOpen, setForgotOpen] = useState(false);
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const { login, signup, googleLogin, user, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     if (!loading && user) {
-      router.push("/dashboard");
+      router.push('/dashboard');
     }
   }, [user, loading, router]);
 
-  if (loading || user) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center bg-background">
-        <IconLoader2 className="h-10 w-10 animate-spin text-primary" />
-      </div>
-    );
-  }
+  const forgotForm = useForm({
+    resolver: zodResolver(ForgotPasswordSchema),
+    defaultValues: { email: '' },
+  });
 
-  // Initialize form with dynamic resolver based on active tab
+  // Main auth form — must be declared before any early returns (Rules of Hooks)
   const form = useForm({
     resolver: zodResolver(activeTab === 'login' ? LoginSchema : SignupSchema),
     defaultValues: { email: '', password: '', full_name: '', re_password: '' },
   });
+
+  const handleForgotSubmit = async (values) => {
+    try {
+      setForgotLoading(true);
+      await requestPasswordReset(values.email);
+      toast.success('Password reset email sent! Check your inbox.');
+      setForgotOpen(false);
+      forgotForm.reset();
+    } catch (err) {
+      toast.error(err.response?.data?.email?.[0] || 'Failed to send reset email.');
+    } finally {
+      setForgotLoading(false);
+    }
+  };
 
   const onSubmit = async (values) => {
     try {
@@ -60,7 +79,7 @@ export default function AuthPage() {
       } else {
         await signup(values);
         toast.success('Account created! Check your email for activation.');
-        setActiveTab('login'); // Move user to login after successful signup
+        setActiveTab('login');
       }
     } catch (err) {
       const errorMsg = err.response?.data?.detail || 'Something went wrong. Please try again.';
@@ -72,6 +91,14 @@ export default function AuthPage() {
     onSuccess: (tokenResponse) => googleLogin(tokenResponse.access_token),
     onError: () => toast.error('Google login failed'),
   });
+
+  if (loading || user) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-background">
+        <IconLoader2 className="h-10 w-10 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="bg-background relative flex min-h-screen w-full items-center justify-center p-4">
@@ -158,7 +185,12 @@ export default function AuthPage() {
                       <div className="flex items-center justify-between">
                         <FormLabel className="text-muted-foreground">Password</FormLabel>
                         {activeTab === 'login' && (
-                          <Button variant="link" className="text-primary h-auto px-0 text-xs">
+                          <Button
+                            type="button"
+                            variant="link"
+                            className="text-primary h-auto px-0 text-xs"
+                            onClick={() => setForgotOpen(true)}
+                          >
                             Forgot?
                           </Button>
                         )}
@@ -241,6 +273,47 @@ export default function AuthPage() {
           </Tabs>
         </CardContent>
       </Card>
+
+      {/* ── Forgot Password Dialog ── */}
+      <Dialog open={forgotOpen} onOpenChange={setForgotOpen}>
+        <DialogContent className="border-border bg-card/90 backdrop-blur-xl sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Reset your password</DialogTitle>
+            <DialogDescription>
+              Enter your email and we&apos;ll send you a reset link.
+            </DialogDescription>
+          </DialogHeader>
+
+          <Form {...forgotForm}>
+            <form onSubmit={forgotForm.handleSubmit(handleForgotSubmit)} className="space-y-4">
+              <FormField
+                control={forgotForm.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-muted-foreground">Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="email@example.com"
+                        {...field}
+                        className="bg-secondary/40 border-border h-11"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" disabled={forgotLoading} className="h-11 w-full font-bold">
+                {forgotLoading ? (
+                  <><IconLoader2 className="mr-2 h-4 w-4 animate-spin" /> Sending...</>
+                ) : (
+                  'Send Reset Link'
+                )}
+              </Button>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
