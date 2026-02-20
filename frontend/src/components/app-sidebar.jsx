@@ -11,6 +11,9 @@ import {
   Terminal,
   Search,
   CheckCircle2,
+  StickyNote,
+  Bell
+
 } from 'lucide-react';
 
 import { NavMain } from '@/components/nav-main';
@@ -28,7 +31,7 @@ import {
 } from '@/components/ui/sidebar';
 import { IconTarget } from '@tabler/icons-react';
 
-// Placement-focused navigation data
+// navigation data
 const data = {
   navMain: [
     {
@@ -41,44 +44,61 @@ const data = {
       title: 'Applications',
       url: '/dashboard/applications',
       icon: Briefcase,
-      items: [
-        { title: 'Active', url: '#' },
-        { title: 'Offers', url: '#' },
-        { title: 'Archived', url: '#' },
-      ],
+      // items: [
+      //   { title: 'Active', url: '#' },
+      //   { title: 'Offers', url: '#' },
+      //   { title: 'Archived', url: '#' },
+      // ],
     },
     {
-      title: 'Resources',
+      title: 'Interview Schedule',
       url: '#',
       icon: BookOpen,
-      items: [
-        { title: 'Resume Templates', url: '#' },
-        { title: 'Interview Prep', url: '#' },
-        { title: 'DSA Roadmap', url: '#' },
-      ],
+      // items: [
+      //   { title: 'Resume Templates', url: '#' },
+      //   { title: 'Interview Prep', url: '#' },
+      //   { title: 'DSA Roadmap', url: '#' },
+      // ],
     },
     {
-      title: 'Settings',
-      url: '/dashboard/profile',
-      icon: Settings2,
+      title: 'Keynotes',
+      url: '#',
+      icon: StickyNote,
+
     },
+    // {
+    //   title: 'HR Contacts',
+    //   url: '#',
+    //   icon: Contact,
+    // }
+
   ],
   quickAccess: [
     {
-      name: 'Resume Builder',
+      name: 'Notifications',
       url: '#',
-      icon: FileText,
+      icon: Bell,
     },
     {
-      name: 'Job Search',
-      url: '#',
-      icon: Search,
+      name: 'Settings',
+      url: '/dashboard/profile',
+      icon: Settings2,
     },
-    {
-      name: 'Certifications',
-      url: '#',
-      icon: GraduationCap,
-    },
+    // {
+    //   name: 'Resume Builder',
+    //   url: '#',
+    //   icon: FileText,
+    // },
+    // {
+    //   name: 'Job Search',
+    //   url: '#',
+    //   icon: Search,
+    // },
+    // {
+    //   name: 'Certifications',
+    //   url: '#',
+    //   icon: GraduationCap,
+    // },
   ],
 };
 

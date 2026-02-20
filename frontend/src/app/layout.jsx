@@ -31,12 +31,12 @@ export default function RootLayout({ children }) {
       <body
         className={`${poppins.variable} antialiased`}
       >
-        <Providers>  
-          <div className="absolute top-6 right-6 z-50">
-  <ThemeToggle />
-</div>
-        {children}
-        <Toaster/>
+        <Providers>
+          <div className="absolute top-4 right-4 z-50">
+            <ThemeToggle />
+          </div>
+          {children}
+          <Toaster />
         </Providers>
       </body>
     </html>

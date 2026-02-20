@@ -1,8 +1,13 @@
 import React from 'react'
+import DataTable from '@/components/data-table'
+import DashboardKPI from '@/components/dashboardKpi'
 
 const Dashboard = () => {
   return (
-    <div>Hello User</div>
+    <div>
+      <DashboardKPI />
+      <DataTable />
+    </div>
   )
 }
 
