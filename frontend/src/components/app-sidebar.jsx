@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import Link from 'next/link';
 import {
   BookOpen,
   LayoutDashboard,
@@ -44,6 +45,7 @@ const data = {
       title: 'Applications',
       url: '/dashboard/applications',
       icon: Briefcase,
+      isActive: false,
       // items: [
       //   { title: 'Active', url: '#' },
       //   { title: 'Offers', url: '#' },
@@ -52,7 +54,7 @@ const data = {
     },
     {
       title: 'Interview Schedule',
-      url: '#',
+      url: '/dashboard/interview-schedule',
       icon: BookOpen,
       // items: [
       //   { title: 'Resume Templates', url: '#' },
@@ -62,7 +64,7 @@ const data = {
     },
     {
       title: 'Keynotes',
-      url: '#',
+      url: '/dashboard/keynotes',
       icon: StickyNote,
 
     },
@@ -109,7 +111,7 @@ export function AppSidebar({ ...props }) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="/dashboard">
+              <Link href="/dashboard">
                 <div className="text-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                   {/* Sudo Placed Icon Logo */}
                   <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-orange-500 to-pink-600 sm:h-8 sm:w-8">
@@ -122,7 +124,7 @@ export function AppSidebar({ ...props }) {
                   </span>
                   {/* <span className="text-muted-foreground truncate text-xs">Placement Tracker</span> */}
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
