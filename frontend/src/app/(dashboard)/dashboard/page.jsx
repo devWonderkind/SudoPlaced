@@ -4,7 +4,7 @@ import DashboardKPI from '@/components/dashboardKpi'
 
 const Dashboard = () => {
   return (
-    <div>
+    <div className='space-y-6'>
       <DashboardKPI />
       <DataTable />
     </div>

@@ -43,21 +43,21 @@ export default function DashboardKPI() {
           shadow-sm hover:shadow-md transition-all duration-300"
                 >
                     <CardContent className="flex items-center justify-between p-6">
-                        <div className="space-y-2">
-                            <p className="text-sm text-muted-foreground">
-                                {item.title}
-                            </p>
-                            <h2 className="text-3xl font-bold">
-                                {item.value}
-                            </h2>
-                        </div>
-
                         <div
                             className={`p-3 rounded-xl ${item.bg} ${item.color}
               shadow-[inset_0_2px_6px_rgba(0,0,0,0.15)]`}
                         >
                             {item.icon}
                         </div>
+                        <div className="space-y-1">
+                            <h2 className="text-3xl font-bold">
+                                {item.value}
+                            </h2>
+                            <p className="text-sm text-muted-foreground">
+                                {item.title}
+                            </p>
+                        </div>
+
                     </CardContent>
 
                     {/* subtle top highlight */}
