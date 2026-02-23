@@ -79,25 +79,25 @@ const DashboardPreview = () => {
       initial="hidden"
       animate={mounted ? "show" : "hidden"}
       variants={container}
-      className="w-full rounded-2xl overflow-hidden border border-white/10 bg-neutral-900/80 backdrop-blur-sm shadow-2xl shadow-black/50 select-none"
+      className="w-full rounded-2xl overflow-hidden border border-neutral-200 bg-white/80 dark:border-white/10 dark:bg-neutral-900/80 backdrop-blur-sm shadow-2xl shadow-neutral-300/50 dark:shadow-black/50 select-none"
     >
       {/* Top reflection */}
-      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent z-20" />
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-neutral-300/40 dark:via-white/20 to-transparent z-20" />
 
       <div className="flex h-[280px] sm:h-[380px] md:h-[480px]">
         {/* ── Sidebar ── */}
-        <motion.div variants={item} className="hidden sm:flex flex-col w-14 md:w-48 bg-neutral-950/80 border-r border-white/5 py-3 px-2 md:px-3 flex-shrink-0">
+        <motion.div variants={item} className="hidden sm:flex flex-col w-14 md:w-48 bg-gray-50/80 border-r border-neutral-200/60 dark:bg-neutral-950/80 dark:border-white/5 py-3 px-2 md:px-3 flex-shrink-0">
           {/* Logo */}
           <div className="flex items-center gap-4">
-                   <div className="flex items-center gap-2 group cursor-pointer">
-                     <div className="w-4 h-4 sm:w-6 sm:h-6 bg-gradient-to-br from-orange-500 to-pink-600 rounded-full flex items-center justify-center">
-                       <IconTarget className="w-2 h-2 sm:w-4 sm:h-4 text-white" stroke={2.5} />
-                     </div>
-                     <span className="font-bold text-base sm:text-md tracking-tight text-white">
-                       sudoplaced
-                     </span>
-                   </div>
-                 </div>
+            <div className="flex items-center gap-2 group cursor-pointer">
+              <div className="w-4 h-4 sm:w-6 sm:h-6 bg-gradient-to-br from-orange-500 to-pink-600 rounded-full flex items-center justify-center">
+                <IconTarget className="w-2 h-2 sm:w-4 sm:h-4 text-white" stroke={2.5} />
+              </div>
+              <span className="font-bold text-base sm:text-md tracking-tight text-neutral-900 dark:text-white">
+                sudoplaced
+              </span>
+            </div>
+          </div>
 
           {/* Nav Items */}
           <div className="space-y-0.5 flex-1">
@@ -108,11 +108,10 @@ const DashboardPreview = () => {
                   key={i}
                   variants={item}
                   onClick={() => setActiveNav(i)}
-                  className={`flex items-center gap-2.5 px-2 py-2 rounded-lg cursor-pointer transition-all duration-200 ${
-                    activeNav === i
-                      ? 'bg-blue-500/10 text-blue-400'
-                      : 'text-neutral-500 hover:text-neutral-300 hover:bg-white/5'
-                  }`}
+                  className={`flex items-center gap-2.5 px-2 py-2 rounded-lg cursor-pointer transition-all duration-200 ${activeNav === i
+                      ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
+                      : 'text-neutral-400 hover:text-neutral-700 hover:bg-neutral-200/50 dark:text-neutral-500 dark:hover:text-neutral-300 dark:hover:bg-white/5'
+                    }`}
                 >
                   <NavIcon size={16} stroke={1.5} />
                   <span className="hidden md:block text-[11px] font-medium">{nav.label}</span>
@@ -122,13 +121,13 @@ const DashboardPreview = () => {
           </div>
 
           {/* User */}
-          <motion.div variants={item} className="flex items-center gap-2 px-2 py-2 rounded-lg bg-white/5 mt-2">
+          <motion.div variants={item} className="flex items-center gap-2 px-2 py-2 rounded-lg bg-neutral-100 dark:bg-white/5 mt-2">
             <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
               <IconUser size={12} className="text-white" stroke={2} />
             </div>
             <div className="hidden md:block">
-              <div className="text-[10px] text-white font-medium leading-tight">Aakanksha Chahal.</div>
-              <div className="text-[8px] text-neutral-500">Pro Plan</div>
+              <div className="text-[10px] text-neutral-900 dark:text-white font-medium leading-tight">Aakanksha Chahal.</div>
+              <div className="text-[8px] text-neutral-400 dark:text-neutral-500">Pro Plan</div>
             </div>
           </motion.div>
         </motion.div>
@@ -136,15 +135,15 @@ const DashboardPreview = () => {
         {/* ── Main Content ── */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Top Bar */}
-          <motion.div variants={item} className="flex items-center justify-between px-3 sm:px-4 md:px-6 py-3 border-b border-white/5">
+          <motion.div variants={item} className="flex items-center justify-between px-3 sm:px-4 md:px-6 py-3 border-b border-neutral-200/60 dark:border-white/5">
             <div className="flex items-center gap-2">
-              <h2 className="text-white text-xs sm:text-sm font-semibold">Dashboard</h2>
-              <span className="text-neutral-500 text-[10px] hidden sm:inline">6 active</span>
+              <h2 className="text-neutral-900 dark:text-white text-xs sm:text-sm font-semibold">Dashboard</h2>
+              <span className="text-neutral-400 dark:text-neutral-500 text-[10px] hidden sm:inline">6 active</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/5 border border-white/5">
-                <IconSearch size={12} className="text-neutral-500" stroke={1.5} />
-                <span className="text-[10px] text-neutral-600">Search...</span>
+              <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-neutral-100 border border-neutral-200 dark:bg-white/5 dark:border-white/5">
+                <IconSearch size={12} className="text-neutral-400 dark:text-neutral-500" stroke={1.5} />
+                <span className="text-[10px] text-neutral-400 dark:text-neutral-600">Search...</span>
               </div>
               <motion.div
                 animate={{ boxShadow: ['0 0 0px rgba(59,130,246,0)', '0 0 12px rgba(59,130,246,0.3)', '0 0 0px rgba(59,130,246,0)'] }}
@@ -160,11 +159,11 @@ const DashboardPreview = () => {
           {/* Stats Row */}
           <motion.div variants={item} className="flex gap-2 sm:gap-3 px-3 sm:px-4 md:px-6 py-3">
             {stats.map((s, i) => (
-              <div key={i} className="flex-1 px-2 sm:px-3 py-2 rounded-xl bg-white/[0.03] border border-white/5">
-                <div className="text-[8px] sm:text-[9px] text-neutral-500 uppercase tracking-wider">{s.label}</div>
+              <div key={i} className="flex-1 px-2 sm:px-3 py-2 rounded-xl bg-neutral-50 border border-neutral-200/60 dark:bg-white/[0.03] dark:border-white/5">
+                <div className="text-[8px] sm:text-[9px] text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">{s.label}</div>
                 <div className="flex items-baseline gap-1 mt-0.5">
-                  <span className="text-white text-sm sm:text-base font-bold">{s.value}</span>
-                  <span className="text-green-400 text-[8px] sm:text-[9px] font-medium">{s.trend}</span>
+                  <span className="text-neutral-900 dark:text-white text-sm sm:text-base font-bold">{s.value}</span>
+                  <span className="text-green-600 dark:text-green-400 text-[8px] sm:text-[9px] font-medium">{s.trend}</span>
                 </div>
               </div>
             ))}
@@ -178,10 +177,10 @@ const DashboardPreview = () => {
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-1.5">
                     <div className={`w-1.5 h-1.5 rounded-full ${col.color}`} />
-                    <span className="text-[10px] sm:text-[11px] text-neutral-400 font-semibold">{col.title}</span>
-                    <span className="text-[9px] text-neutral-600 bg-white/5 px-1.5 py-0.5 rounded-full">{col.count}</span>
+                    <span className="text-[10px] sm:text-[11px] text-neutral-500 dark:text-neutral-400 font-semibold">{col.title}</span>
+                    <span className="text-[9px] text-neutral-400 dark:text-neutral-600 bg-neutral-100 dark:bg-white/5 px-1.5 py-0.5 rounded-full">{col.count}</span>
                   </div>
-                  <IconDotsVertical size={12} className="text-neutral-600" stroke={1.5} />
+                  <IconDotsVertical size={12} className="text-neutral-400 dark:text-neutral-600" stroke={1.5} />
                 </div>
 
                 {/* Cards */}
@@ -195,18 +194,18 @@ const DashboardPreview = () => {
                         onHoverStart={() => setHoveredCard(globalIdx)}
                         onHoverEnd={() => setHoveredCard(null)}
                         animate={hoveredCard === globalIdx ? { y: -2, transition: { duration: 0.2 } } : { y: 0 }}
-                        className={`bg-white/[0.03] border border-white/5 border-l-2 ${card.color} rounded-lg p-2 sm:p-2.5 cursor-pointer hover:bg-white/[0.06] hover:border-white/10 transition-colors`}
+                        className={`bg-white border border-neutral-200/60 dark:bg-white/[0.03] dark:border-white/5 border-l-2 ${card.color} rounded-lg p-2 sm:p-2.5 cursor-pointer hover:bg-neutral-50 hover:border-neutral-300 dark:hover:bg-white/[0.06] dark:hover:border-white/10 transition-colors`}
                       >
                         <div className="flex items-start justify-between">
                           <div className="min-w-0">
-                            <div className="text-[10px] sm:text-[11px] text-white font-medium truncate">{card.company}</div>
-                            <div className="text-[8px] sm:text-[9px] text-neutral-500 truncate mt-0.5">{card.role}</div>
+                            <div className="text-[10px] sm:text-[11px] text-neutral-900 dark:text-white font-medium truncate">{card.company}</div>
+                            <div className="text-[8px] sm:text-[9px] text-neutral-400 dark:text-neutral-500 truncate mt-0.5">{card.role}</div>
                           </div>
-                          <IconArrowUpRight size={10} className="text-neutral-600 flex-shrink-0 ml-1" stroke={1.5} />
+                          <IconArrowUpRight size={10} className="text-neutral-400 dark:text-neutral-600 flex-shrink-0 ml-1" stroke={1.5} />
                         </div>
                         <div className="flex items-center gap-1 mt-1.5">
-                          <IconCalendar size={8} className="text-neutral-600" stroke={1.5} />
-                          <span className="text-[7px] sm:text-[8px] text-neutral-600">{card.time}</span>
+                          <IconCalendar size={8} className="text-neutral-400 dark:text-neutral-600" stroke={1.5} />
+                          <span className="text-[7px] sm:text-[8px] text-neutral-400 dark:text-neutral-600">{card.time}</span>
                         </div>
                       </motion.div>
                     );
@@ -223,37 +222,37 @@ const DashboardPreview = () => {
 
 
 export default function Hero() {
-  
+
   return (
     <section className="relative flex flex-col items-center justify-center px-4 pt-24 pb-24 md:pt-40 md:pb-32 text-center overflow-hidden">
       {/* Background Gradient Effect */}
-      <div className="absolute inset-0 bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950 -z-10" />
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-50 via-white to-gray-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950 -z-10" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-cyan-500/10 rounded-full blur-3xl -z-10" />
 
       {/* Main Heading */}
       <div className='flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2'>
-      <h1 className="max-w-6xl text-2xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight">
-        Your career journey,
-      </h1>
+        <h1 className="max-w-6xl text-2xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight text-neutral-900 dark:text-neutral-100">
+          Your career journey,
+        </h1>
         <TextZRotate className="text-2xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight" text="Organized" />
-    </div>
+      </div>
 
       {/* Subheading */}
-      <p className="mt-6 max-w-3xl text-base sm:text-lg text-neutral-400">
+      <p className="mt-6 max-w-3xl text-base sm:text-lg text-neutral-500 dark:text-neutral-400">
         Everything you need to navigate the job market in one place. Manage your pipeline with ease, never miss a follow-up, and turn your job search into a science. The grind is better together.
       </p>
 
       {/* Interactive Dashboard Preview */}
       <div className="relative mt-8 md:mt-12 w-full max-w-5xl mx-auto overflow-visible">
         {/* Gradient glow blobs behind dashboard */}
-        <div className="absolute -top-24 -left-20 w-[350px] h-[350px] md:w-[500px] md:h-[500px] bg-gradient-to-br from-purple-600/20 via-violet-500/15 to-transparent rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -top-16 -right-16 w-[300px] h-[300px] md:w-[450px] md:h-[450px] bg-gradient-to-bl from-blue-600/20 via-cyan-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 w-[400px] h-[250px] md:w-[600px] md:h-[350px] bg-gradient-to-t from-orange-500/10 via-pink-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -left-20 w-[350px] h-[350px] md:w-[500px] md:h-[500px] bg-gradient-to-br from-purple-600/15 via-violet-500/10 dark:from-purple-600/20 dark:via-violet-500/15 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-16 -right-16 w-[300px] h-[300px] md:w-[450px] md:h-[450px] bg-gradient-to-bl from-blue-600/15 via-cyan-500/8 dark:from-blue-600/20 dark:via-cyan-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 w-[400px] h-[250px] md:w-[600px] md:h-[350px] bg-gradient-to-t from-orange-500/8 via-pink-500/8 dark:from-orange-500/10 dark:via-pink-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10">
           <DashboardPreview />
           {/* Bottom fade overlay */}
-          <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-neutral-950 to-transparent z-10 pointer-events-none" />
+          <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-gray-50 dark:from-neutral-950 to-transparent z-10 pointer-events-none" />
         </div>
       </div>
     </section>

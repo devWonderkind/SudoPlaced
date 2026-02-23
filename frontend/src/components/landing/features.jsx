@@ -1,11 +1,11 @@
 "use client"
 import { motion } from 'framer-motion';
-import { 
-  IconLayoutColumns, 
-  IconNotes, 
-  IconBellRinging, 
-  IconBrandX, 
-  IconCurrencyDollar 
+import {
+  IconLayoutColumns,
+  IconNotes,
+  IconBellRinging,
+  IconBrandX,
+  IconCurrencyDollar
 } from '@tabler/icons-react';
 
 
@@ -18,24 +18,24 @@ const FeatureCard = ({ title, desc, icon: Icon, className, delay }) => {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 1, delay: delay }}
       viewport={{ once: true }}
-      className={`relative group overflow-hidden p-8 rounded-[2rem] border border-neutral-800 bg-neutral-900 flex flex-col gap-6 transition-colors hover:border-neutral-700 ${className}
+      className={`relative group overflow-hidden p-8 rounded-[2rem] border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900 flex flex-col gap-6 transition-colors hover:border-neutral-300 dark:hover:border-neutral-700 ${className}
       `}
     >
-        
+
       {/* Micro-interaction: Background Glow */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-      
-    
+
+
       <div className="relative z-10">
-        <h3 className="text-xl font-medium text-white mb-3 tracking-tight">{title}</h3>
-        <p className="text-neutral-400 text-sm leading-relaxed max-w-[280px]">
+        <h3 className="text-xl font-medium text-neutral-900 dark:text-white mb-3 tracking-tight">{title}</h3>
+        <p className="text-neutral-500 dark:text-neutral-400 text-sm leading-relaxed max-w-[280px]">
           {desc}
         </p>
       </div>
 
       {/* Decorative Corner Element */}
       <div className="absolute top-4 right-4 opacity-10 group-hover:opacity-30 transition-opacity">
-        <Icon size={32} stroke={1}/>
+        <Icon size={32} stroke={1} />
       </div>
     </motion.div>
   );
@@ -77,31 +77,31 @@ export default function Features() {
   ];
 
   return (
-    <section id='features' className="bg-neutral-950 py-10 px-6">
+    <section id='features' className="bg-gray-50 dark:bg-neutral-950 py-10 px-6">
       <div className="max-w-6xl mx-auto">
         {/* Aesthetic Header */}
         <div className="mb-20 space-y-4">
-          <motion.span 
+          <motion.span
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             className="text-blue-500 text-sm font-mono tracking-widest uppercase"
           >
             // System Features
           </motion.span>
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            className="text-4xl md:text-6xl text-white font-bold tracking-tighter"
+            className="text-4xl md:text-6xl text-neutral-900 dark:text-white font-bold tracking-tighter"
           >
             Structure the grind. <br />
-            <span className="text-neutral-500">Collect the win.</span>
+            <span className="text-neutral-400 dark:text-neutral-500">Collect the win.</span>
           </motion.h2>
         </div>
 
         {/* Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
           {features.map((f, i) => (
-            <FeatureCard 
+            <FeatureCard
               key={i}
               title={f.title}
               desc={f.desc}

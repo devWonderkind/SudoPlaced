@@ -9,8 +9,8 @@ import Footer from '@/components/landing/footer';
 
 export default function Layout({ children }) {
     return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100">
-        
+        <div className="min-h-screen bg-gray-50 text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100">
+
             <Navbar />
             <Hero />
             <Features />

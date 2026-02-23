@@ -12,16 +12,16 @@ export default function Navbar() {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-black/10 backdrop-blur-sm border border-neutral-800 max-w-4xl mx-auto my-2 rounded-full">
+    <div className="fixed top-0 left-0 right-0 z-50 bg-white/60 border border-neutral-200 dark:bg-black/10 backdrop-blur-sm dark:border-neutral-800 max-w-4xl mx-auto my-2 rounded-full">
       <nav className="flex items-center justify-between px-4 sm:px-6 py-3 w-full">
-        
+
         {/* Logo */}
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 group cursor-pointer">
             <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-orange-500 to-pink-600 rounded-full flex items-center justify-center">
               <IconTarget className="w-4 h-4 sm:w-5 sm:h-5 text-white" stroke={2.5} />
             </div>
-            <span className="font-bold text-base sm:text-lg tracking-tight text-white">
+            <span className="font-bold text-base sm:text-lg tracking-tight text-neutral-900 dark:text-white">
               sudoplaced
             </span>
           </div>
@@ -29,10 +29,10 @@ export default function Navbar() {
 
         {/* Desktop Navigation Links */}
         <div className="hidden md:flex items-center gap-1">
-          <Link href="#features" className="px-4 py-2 text-neutral-300 hover:text-white hover:bg-white/10 rounded-full transition-all duration-200 text-sm font-medium">
+          <Link href="#features" className="px-4 py-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-900/5 dark:text-neutral-300 dark:hover:text-white dark:hover:bg-white/10 rounded-full transition-all duration-200 text-sm font-medium">
             Features
           </Link>
-          <Link href="#how-it-works" className="px-4 py-2 text-neutral-300 hover:text-white hover:bg-white/10 rounded-full transition-all duration-200 text-sm font-medium">
+          <Link href="#how-it-works" className="px-4 py-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-900/5 dark:text-neutral-300 dark:hover:text-white dark:hover:bg-white/10 rounded-full transition-all duration-200 text-sm font-medium">
             How It Works
           </Link>
           <Link href="/login" className='cursor-pointer'>
@@ -40,42 +40,41 @@ export default function Navbar() {
               Login
             </Button>
           </Link>
-    
+
         </div>
 
         {/* Mobile Menu Button */}
-        <button 
+        <button
           onClick={toggleMenu}
-          className="md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 transition-colors duration-200"
+          className="md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-neutral-900/5 hover:bg-neutral-900/10 dark:bg-white/5 dark:hover:bg-white/10 transition-colors duration-200"
           aria-label="Toggle menu"
         >
           {isMenuOpen ? (
-            <IconX className="w-5 h-5 text-white" stroke={2} />
+            <IconX className="w-5 h-5 text-neutral-900 dark:text-white" stroke={2} />
           ) : (
-            <IconMenu2 className="w-5 h-5 text-white" stroke={2} />
+            <IconMenu2 className="w-5 h-5 text-neutral-900 dark:text-white" stroke={2} />
           )}
         </button>
       </nav>
 
       {/* Mobile Navigation Drawer */}
-      <div 
-        className={`md:hidden absolute top-full left-0 right-0 bg-black/80 backdrop-blur-3xl border-b border-neutral-800 rounded-b-2xl rounded-t-none mx-5 overflow-hidden transition-all duration-300 ease-out ${
-          isMenuOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
-        }`}
+      <div
+        className={`md:hidden absolute top-full left-0 right-0 bg-white/80 backdrop-blur-3xl border-b border-neutral-200 dark:bg-black/80 dark:border-neutral-800 rounded-b-2xl rounded-t-none mx-5 overflow-hidden transition-all duration-300 ease-out ${isMenuOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
+          }`}
       >
         <div className="flex flex-col px-4 py-4 gap-2">
-          <Link 
-            href="#features" 
+          <Link
+            href="#features"
             onClick={() => setIsMenuOpen(false)}
-            className="px-4 py-3 text-neutral-300 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-200 text-base font-medium
+            className="px-4 py-3 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-900/5 dark:text-neutral-300 dark:hover:text-white dark:hover:bg-white/10 rounded-xl transition-all duration-200 text-base font-medium
             "
           >
             Features
           </Link>
-          <Link 
-            href="#how-it-works" 
+          <Link
+            href="#how-it-works"
             onClick={() => setIsMenuOpen(false)}
-            className="px-4 py-3 text-neutral-300 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-200 text-base font-medium"
+            className="px-4 py-3 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-900/5 dark:text-neutral-300 dark:hover:text-white dark:hover:bg-white/10 rounded-xl transition-all duration-200 text-base font-medium"
           >
             How It Works
           </Link>

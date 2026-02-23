@@ -1,10 +1,10 @@
 "use client"
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { 
-  IconClipboardCheck, 
-  IconAdjustmentsAlt, 
-  IconMessageDots, 
+import {
+  IconClipboardCheck,
+  IconAdjustmentsAlt,
+  IconMessageDots,
   IconConfetti,
   IconBriefcase,
   IconLink,
@@ -34,9 +34,9 @@ const UnifiedDemo = ({ activeStep }) => {
 
   return (
     <div ref={ref} className="relative w-full h-full">
-      <div className="bg-neutral-900/90 backdrop-blur-xl border border-neutral-800 rounded-2xl overflow-hidden shadow-2xl shadow-black/40 h-full flex flex-col">
+      <div className="bg-white/90 border border-neutral-200 dark:bg-neutral-900/90 backdrop-blur-xl dark:border-neutral-800 rounded-2xl overflow-hidden shadow-2xl shadow-neutral-300/40 dark:shadow-black/40 h-full flex flex-col">
         {/* Window Chrome */}
-        <div className="flex items-center gap-2 px-4 py-3 border-b border-neutral-800/80 bg-neutral-900/60">
+        <div className="flex items-center gap-2 px-4 py-3 border-b border-neutral-200/80 bg-gray-50/60 dark:border-neutral-800/80 dark:bg-neutral-900/60">
           <div className="flex gap-1.5">
             <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
             <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
@@ -48,7 +48,7 @@ const UnifiedDemo = ({ activeStep }) => {
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
-              className="text-[10px] text-neutral-500 font-mono ml-2"
+              className="text-[10px] text-neutral-400 dark:text-neutral-500 font-mono ml-2"
             >
               {['+ New Application', 'Pipeline Board', 'Interview KeyNotes', 'Offer Tracker'][activeStep]}
             </motion.span>
@@ -110,12 +110,11 @@ const FormPanel = ({ isInView }) => {
         const filled = phase > i + 1;
         return (
           <motion.div key={f.key} animate={{ opacity: phase >= i + 1 ? 1 : 0.35, scale: isActive ? 1.02 : 1 }}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl border transition-all ${
-              isActive ? 'border-blue-500/50 bg-blue-500/5' : filled ? 'border-neutral-700/40 bg-neutral-800/40' : 'border-neutral-800/30 bg-neutral-800/20'
-            }`}>
-            <Icon size={16} className={isActive ? 'text-blue-400' : 'text-neutral-600'} stroke={1.5} />
-            <div className="flex-1 text-sm text-white font-medium flex items-center">
-              {typed[f.key] || <span className="text-neutral-600 text-xs">{f.placeholder}</span>}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl border transition-all ${isActive ? 'border-blue-500/50 bg-blue-500/5' : filled ? 'border-neutral-200/60 bg-neutral-50/60 dark:border-neutral-700/40 dark:bg-neutral-800/40' : 'border-neutral-200/30 bg-neutral-50/30 dark:border-neutral-800/30 dark:bg-neutral-800/20'
+              }`}>
+            <Icon size={16} className={isActive ? 'text-blue-400' : 'text-neutral-400 dark:text-neutral-600'} stroke={1.5} />
+            <div className="flex-1 text-sm text-neutral-900 dark:text-white font-medium flex items-center">
+              {typed[f.key] || <span className="text-neutral-400 dark:text-neutral-600 text-xs">{f.placeholder}</span>}
               {isActive && <motion.span animate={{ opacity: [1, 0] }} transition={{ duration: 0.5, repeat: Infinity, repeatType: 'reverse' }} className="w-[1px] h-3 bg-blue-400 ml-px" />}
             </div>
             {filled && <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}><IconCheck size={11} className="text-green-500" stroke={2} /></motion.div>}
@@ -123,7 +122,7 @@ const FormPanel = ({ isInView }) => {
         );
       })}
       <motion.div animate={{ boxShadow: phase === 4 ? '0 0 20px rgba(59,130,246,0.3)' : 'none' }}
-        className={`w-full py-3 rounded-xl text-sm font-semibold text-center mt-2 transition-all ${phase === 4 ? 'bg-blue-600 text-white' : 'bg-neutral-800 text-neutral-500'}`}>
+        className={`w-full py-3 rounded-xl text-sm font-semibold text-center mt-2 transition-all ${phase === 4 ? 'bg-blue-600 text-white' : 'bg-neutral-100 text-neutral-400 dark:bg-neutral-800 dark:text-neutral-500'}`}>
         {phase === 4 ? <span className="flex items-center justify-center gap-1"><IconCheck size={13} stroke={2} /> Added!</span> : 'Add Application'}
       </motion.div>
     </motion.div>
@@ -168,17 +167,17 @@ const BoardPanel = ({ isInView }) => {
         <div key={col} className="space-y-1.5">
           <div className="flex items-center gap-1 mb-1">
             <div className={`w-1.5 h-1.5 rounded-full ${dots[ci]}`} />
-            <span className="text-[10px] text-neutral-400 font-semibold uppercase tracking-wider">{col}</span>
+            <span className="text-[10px] text-neutral-500 dark:text-neutral-400 font-semibold uppercase tracking-wider">{col}</span>
           </div>
-          <div className="min-h-[200px] rounded-lg bg-neutral-800/30 border border-neutral-800/30 p-2 space-y-2">
+          <div className="min-h-[200px] rounded-lg bg-neutral-50/50 border border-neutral-200/40 dark:bg-neutral-800/30 dark:border-neutral-800/30 p-2 space-y-2">
             <AnimatePresence mode="popLayout">
               {layout(ci).map(idx => (
                 <motion.div key={cards[idx].id} layout
                   initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }} transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                  className={`bg-neutral-800/80 border border-neutral-700/40 border-l-2 ${cards[idx].border} rounded-lg px-3 py-2.5`}>
-                  <div className="text-xs text-white font-medium">{cards[idx].label}</div>
-                  <div className="text-[10px] text-neutral-500 mt-0.5">{cards[idx].sub}</div>
+                  className={`bg-white border border-neutral-200/60 dark:bg-neutral-800/80 dark:border-neutral-700/40 border-l-2 ${cards[idx].border} rounded-lg px-3 py-2.5`}>
+                  <div className="text-xs text-neutral-900 dark:text-white font-medium">{cards[idx].label}</div>
+                  <div className="text-[10px] text-neutral-400 dark:text-neutral-500 mt-0.5">{cards[idx].sub}</div>
                 </motion.div>
               ))}
             </AnimatePresence>
@@ -229,13 +228,13 @@ const NotesPanel = ({ isInView }) => {
       {lines.map((line, i) => (
         <motion.div key={i} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           className={`flex items-start gap-1.5 py-1 px-2 rounded ${notes[i]?.hl ? 'bg-blue-500/10 border-l-2 border-l-blue-500/50' : ''}`}>
-          <span className={notes[i]?.hl ? 'text-blue-300 whitespace-pre' : 'text-neutral-400 whitespace-pre'}>{line}</span>
+          <span className={notes[i]?.hl ? 'text-blue-600 dark:text-blue-300 whitespace-pre' : 'text-neutral-500 dark:text-neutral-400 whitespace-pre'}>{line}</span>
           {i === curLine && <motion.span animate={{ opacity: [1, 0] }} transition={{ duration: 0.4, repeat: Infinity, repeatType: 'reverse' }} className="w-[1.5px] h-4 bg-blue-400 mt-0.5" />}
         </motion.div>
       ))}
       {lines.length === 0 && (
         <div className="flex items-center justify-center h-[240px]">
-          <motion.span animate={{ opacity: [0.3, 0.6] }} transition={{ duration: 1, repeat: Infinity, repeatType: 'reverse' }} className="text-neutral-600 text-[10px]">Starting session...</motion.span>
+          <motion.span animate={{ opacity: [0.3, 0.6] }} transition={{ duration: 1, repeat: Infinity, repeatType: 'reverse' }} className="text-neutral-400 dark:text-neutral-600 text-[10px]">Starting session...</motion.span>
         </div>
       )}
     </motion.div>
@@ -275,13 +274,13 @@ const OfferPanel = ({ isInView }) => {
         <motion.div animate={phase >= 2 ? { scale: [1, 1.05, 1] } : {}}
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-500/10 border border-green-500/20 mb-3">
           <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-          <span className="text-xs text-green-400 font-medium">Offer Received</span>
+          <span className="text-xs text-green-600 dark:text-green-400 font-medium">Offer Received</span>
         </motion.div>
-        <div className="text-neutral-500 text-[10px] uppercase tracking-wider mb-1">Total Compensation</div>
-        <motion.div className="text-4xl font-bold tabular-nums" animate={{ color: phase >= 2 ? '#4ade80' : '#fff' }}>
-          ${salary.toLocaleString()}
+        <div className="text-neutral-400 dark:text-neutral-500 text-[10px] uppercase tracking-wider mb-1">Total Compensation</div>
+        <motion.div className="text-4xl font-bold tabular-nums" animate={{ color: phase >= 2 ? '#4ade80' : undefined }} style={{ color: phase < 2 ? undefined : undefined }}>
+          <span className={phase < 2 ? 'text-neutral-900 dark:text-white' : 'text-green-500'}>${salary.toLocaleString()}</span>
         </motion.div>
-        <div className="text-neutral-600 text-[10px] mt-1">per year · Stripe</div>
+        <div className="text-neutral-400 dark:text-neutral-600 text-[10px] mt-1">per year · Stripe</div>
       </div>
 
       {/* Confetti */}
@@ -304,9 +303,9 @@ const OfferPanel = ({ isInView }) => {
         {[{ l: 'Base', v: '$165K' }, { l: 'Equity', v: '$15K' }, { l: 'Bonus', v: '$5K' }].map((item, i) => (
           <motion.div key={item.l} initial={{ opacity: 0, y: 8 }} animate={{ opacity: phase >= 1 ? 1 : 0, y: phase >= 1 ? 0 : 8 }}
             transition={{ delay: i * 0.1 + 0.2 }}
-            className="text-center p-2.5 rounded-lg bg-neutral-800/50 border border-neutral-800/40">
-            <div className="text-[9px] text-neutral-600 uppercase">{item.l}</div>
-            <div className="text-sm text-white font-semibold mt-0.5">{item.v}</div>
+            className="text-center p-2.5 rounded-lg bg-neutral-50/60 border border-neutral-200/50 dark:bg-neutral-800/50 dark:border-neutral-800/40">
+            <div className="text-[9px] text-neutral-400 dark:text-neutral-600 uppercase">{item.l}</div>
+            <div className="text-sm text-neutral-900 dark:text-white font-semibold mt-0.5">{item.v}</div>
           </motion.div>
         ))}
       </div>
@@ -314,7 +313,7 @@ const OfferPanel = ({ isInView }) => {
       {/* Share */}
       <motion.div animate={{ boxShadow: phase === 3 ? ['0 0 0px rgba(59,130,246,0)', '0 0 18px rgba(59,130,246,0.4)', '0 0 0px rgba(59,130,246,0)'] : 'none' }}
         transition={{ duration: 1.5, repeat: phase === 3 ? Infinity : 0 }}
-        className={`flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all ${phase >= 3 ? 'bg-blue-600 text-white' : 'bg-neutral-800 text-neutral-500'}`}>
+        className={`flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all ${phase >= 3 ? 'bg-blue-600 text-white' : 'bg-neutral-100 text-neutral-400 dark:bg-neutral-800 dark:text-neutral-500'}`}>
         <IconShare size={14} stroke={1.5} /><span>Share Journey on 𝕏</span>
       </motion.div>
     </motion.div>
@@ -333,31 +332,31 @@ const Step = ({ number, title, desc, icon: Icon, isLast, isActive, onClick }) =>
     >
       {/* Connecting Line */}
       {!isLast && (
-        <div className={`absolute left-7 top-14 bottom-0 w-[2px] transition-colors duration-500 ${isActive ? 'bg-blue-500/40' : 'bg-neutral-800'}`} />
+        <div className={`absolute left-7 top-14 bottom-0 w-[2px] transition-colors duration-500 ${isActive ? 'bg-blue-500/40' : 'bg-neutral-200 dark:bg-neutral-800'}`} />
       )}
 
       {/* Number Circle */}
-      <motion.div 
-        animate={isActive ? { scale: [0.95, 1.05, 1], borderColor: 'rgba(59,130,246,0.5)' } : { scale: 1, borderColor: 'rgba(38,38,38,1)' }}
+      <motion.div
+        animate={isActive ? { scale: [0.95, 1.05, 1], borderColor: 'rgba(59,130,246,0.5)' } : { scale: 1, borderColor: 'rgba(229,229,229,1)' }}
         transition={{ duration: 0.5 }}
-        className="relative z-10 flex-shrink-0 w-14 h-14 rounded-2xl bg-neutral-900 border flex items-center justify-center text-white font-mono font-bold transition-all duration-500"
+        className="relative z-10 flex-shrink-0 w-14 h-14 rounded-2xl bg-white dark:bg-neutral-900 border flex items-center justify-center text-neutral-900 dark:text-white font-mono font-bold transition-all duration-500"
         style={isActive ? { boxShadow: '0 0 20px rgba(59,130,246,0.2)' } : {}}
       >
         {number}
       </motion.div>
 
       {/* Content */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, x: 20 }}
         whileInView={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8 }}
         className="pt-2"
       >
         <div className="flex items-center gap-3 mb-2">
-          <Icon className={`transition-colors duration-300 ${isActive ? 'text-blue-500' : 'text-neutral-600'}`} size={22} stroke={1.5} />
-          <h3 className="text-xl md:text-2xl font-semibold text-white tracking-tight">{title}</h3>
+          <Icon className={`transition-colors duration-300 ${isActive ? 'text-blue-500' : 'text-neutral-400 dark:text-neutral-600'}`} size={22} stroke={1.5} />
+          <h3 className="text-xl md:text-2xl font-semibold text-neutral-900 dark:text-white tracking-tight">{title}</h3>
         </div>
-        <p className="text-neutral-400 leading-relaxed max-w-md text-base md:text-lg">
+        <p className="text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-md text-base md:text-lg">
           {desc}
         </p>
       </motion.div>
@@ -407,20 +406,20 @@ export default function HowItWorks() {
   ];
 
   return (
-    <section id='how-it-works' ref={sectionRef} className="bg-neutral-950 py-10 px-6 overflow-hidden">
+    <section id='how-it-works' ref={sectionRef} className="bg-gray-50 dark:bg-neutral-950 py-10 px-6 overflow-hidden">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-20 md:mb-24">
-          <motion.span 
+          <motion.span
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             className="text-blue-500 text-sm font-mono tracking-widest uppercase"
           >
             // How it works
           </motion.span>
-          <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tighter mb-6">
+          <h2 className="text-4xl md:text-6xl font-bold text-neutral-900 dark:text-white tracking-tighter mb-6">
             Four steps to <br />
-            <span className="text-neutral-500">end the job search chaos.</span>
+            <span className="text-neutral-400 dark:text-neutral-500">end the job search chaos.</span>
           </h2>
           <div className="h-1 w-20 bg-blue-600 rounded-full" />
         </div>
@@ -430,7 +429,7 @@ export default function HowItWorks() {
           {/* Left: Steps */}
           <div className="relative">
             {steps.map((step, index) => (
-              <Step 
+              <Step
                 key={index}
                 number={`0${index + 1}`}
                 title={step.title}
@@ -446,7 +445,7 @@ export default function HowItWorks() {
             <div className="flex gap-2 mt-4 ml-4">
               {steps.map((_, i) => (
                 <button key={i} onClick={() => setActiveStep(i)}
-                  className={`h-1.5 rounded-full transition-all duration-500 ${activeStep === i ? 'w-8 bg-blue-500' : 'w-3 bg-neutral-700 hover:bg-neutral-600'}`}
+                  className={`h-1.5 rounded-full transition-all duration-500 ${activeStep === i ? 'w-8 bg-blue-500' : 'w-3 bg-neutral-300 hover:bg-neutral-400 dark:bg-neutral-700 dark:hover:bg-neutral-600'}`}
                 />
               ))}
             </div>
