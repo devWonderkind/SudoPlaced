@@ -20,6 +20,8 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
+import AddApplicationModal from "@/components/applicationModal";
+
 const users = [
     { id: 1, name: "Slack", role: "Frontend", status: "In-Progress", appliedOn: "2022-01-01" },
     { id: 2, name: "Linkedin", role: "Backend", status: "Rejected", appliedOn: "2022-01-02" },
@@ -30,6 +32,7 @@ const users = [
 export default function DataTable() {
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
+    const [open, setOpen] = useState(false);
 
     const filteredUsers = useMemo(() => {
         return users.filter((user) => {
@@ -71,7 +74,8 @@ export default function DataTable() {
                                     <SelectItem value="Accepted">Accepted</SelectItem>
                                 </SelectContent>
                             </Select>
-                            <Button>Add</Button>
+                            {/* Modal */}
+                            <AddApplicationModal open={open} setOpen={setOpen} />
                         </div>
 
                     </div>
