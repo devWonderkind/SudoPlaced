@@ -28,7 +28,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { IconBrandGoogleFilled, IconEye, IconEyeOff, IconLoader2 } from '@tabler/icons-react';
-import { ThemeToggle } from '@/components/theme-toggle';
 import { useRouter } from 'next/navigation';
 import { requestPasswordReset } from '@/api/auth';
 
@@ -102,11 +101,6 @@ export default function AuthPage() {
 
   return (
     <div className="bg-background relative flex min-h-screen w-full items-center justify-center p-4">
-      {/* Theme Toggle - Always visible */}
-      <div className="absolute top-6 right-6">
-        <ThemeToggle />
-      </div>
-
       <Card className="border-border bg-card/60 w-full max-w-md shadow-2xl backdrop-blur-xl">
         <CardHeader className="text-center">
           <CardTitle className="from-foreground to-muted-foreground bg-gradient-to-r bg-clip-text text-3xl font-extrabold text-transparent">
@@ -124,7 +118,7 @@ export default function AuthPage() {
             value={activeTab}
             onValueChange={(val) => {
               setActiveTab(val);
-              form.reset(); 
+              form.reset();
             }}
             className="w-full"
           >
@@ -135,7 +129,7 @@ export default function AuthPage() {
 
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                
+
                 {/* Full Name - Signup Only */}
                 {activeTab === 'signup' && (
                   <FormField
