@@ -26,7 +26,7 @@ export default function SortableItem({ id, item }) {
 
     return (
         <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-            <Card className="p-4 transition-colors cursor-grab active:cursor-grabbing group">
+            <Card className="p-2 transition-colors cursor-grab active:cursor-grabbing group">
 
                 {/* 1. Company Name / Title */}
                 <div className="flex justify-between items-start">

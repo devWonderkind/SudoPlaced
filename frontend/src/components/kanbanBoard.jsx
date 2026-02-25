@@ -107,10 +107,10 @@ export default function KanbanBoard() {
     };
 
     return (
-        <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-6 bg-muted/50 rounded-lg min-h-screen">
+        <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd} className="overflow-x-auto">
+            <div className="grid grid-cols-4 gap-6 min-h-screen w-full">
                 {Object.entries(columns).map(([column, items]) => (
-                    <div key={column} className="flex flex-col w-full overflow-x-auto border border-muted rounded-lg p-2">
+                    <div key={column} className="flex flex-col min-w-[255px] border border-dashed border-muted rounded-lg p-2">
                         {/* Column Header */}
                         <div className="flex items-center justify-between px-2 mb-4">
                             <div className="flex items-center gap-2">
