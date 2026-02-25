@@ -12,26 +12,58 @@ import {
     arrayMove,
 } from "@dnd-kit/sortable";
 import SortableItem from "@/components/sortable-item";
-import { IconDots, IconPlus, IconCircleCheckFilled, IconCircleDashed, IconCircleXFilled, IconLoaderQuarter } from '@tabler/icons-react';
+import { IconCircleCheckFilled, IconCircleDashed, IconCircleXFilled, IconProgress } from '@tabler/icons-react';
 
 const initialData = {
     "In-Progress": [
-        { id: "1", title: "Google - Frontend" },
-        { id: "2", title: "Amazon - SDE" },
+        {
+            id: "1",
+            title: "Google",
+            role: "Frontend Developer",
+            url: "https://google.com/careers",
+            appliedDate: "Feb 24, 2026"
+        },
+        {
+            id: "2",
+            title: "Amazon",
+            role: "SDE",
+            url: "https://amazon.com/careers",
+            appliedDate: "Feb 24, 2026"
+        },
+
     ],
-    Accepted: [{ id: "3", title: "Meta - React Dev" }],
-    Rejected: [{ id: "4", title: "Netflix - UI Eng" }],
-    Offered: [],
+    "Accepted": [
+        {
+            id: "3",
+            title: "Meta",
+            role: "React Developer",
+            url: "https://meta.com/careers",
+            appliedDate: "Feb 24, 2026"
+        },
+    ],
+    "Rejected": [
+        {
+            id: "4",
+            title: "Netflix",
+            role: "UI Engineer",
+            url: "https://netflix.com/careers",
+            appliedDate: "Feb 24, 2026"
+        },
+    ],
+    "Offered": [],
+    // ... other columns
 };
 
 const statusConfig = {
-    "In Progress": { icon: <IconLoaderQuarter className="text-yellow-500" size={16} />, count: 1 },
-    "Done": { icon: <IconCircleCheckFilled className="text-indigo-500" size={16} />, count: 6 },
-    "Canceled": { icon: <IconCircleXFilled className="text-slate-500" size={16} />, count: 4 },
+    "In-Progress": { icon: <IconProgress className="text-yellow-500" size={16} />, count: 1 },
+    "Accepted": { icon: <IconCircleCheckFilled className="text-green-500" size={16} />, count: 6 },
+    "Rejected": { icon: <IconCircleXFilled className="text-red-500" size={16} />, count: 4 },
+    "Offered": { icon: <IconCircleCheckFilled className="text-blue-500" size={16} />, count: 6 },
 };
 
 export default function KanbanBoard() {
     const [columns, setColumns] = useState(initialData);
+    const [activeCard, setActiveCard] = useState(null);
 
     const findColumn = (id) => {
         return Object.keys(columns).find((key) =>
@@ -76,19 +108,15 @@ export default function KanbanBoard() {
 
     return (
         <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-6 bg-[#0c0d0e] min-h-screen text-slate-300">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-6 bg-muted/50 rounded-lg min-h-screen">
                 {Object.entries(columns).map(([column, items]) => (
-                    <div key={column} className="flex flex-col min-w-[300px]">
+                    <div key={column} className="flex flex-col w-full overflow-x-auto border border-muted rounded-lg p-2">
                         {/* Column Header */}
                         <div className="flex items-center justify-between px-2 mb-4">
                             <div className="flex items-center gap-2">
                                 {statusConfig[column]?.icon || <IconCircleDashed size={16} />}
-                                <span className="text-sm font-medium text-slate-200">{column}</span>
-                                <span className="text-xs text-slate-500 ml-1">{items.length}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-slate-500">
-                                <IconDots size={16} className="cursor-pointer hover:text-slate-300" />
-                                <IconPlus size={16} className="cursor-pointer hover:text-slate-300" />
+                                <span className="text-sm font-medium">{column}</span>
+                                <span className="text-xs ml-1">{items.length}</span>
                             </div>
                         </div>
 
@@ -98,13 +126,21 @@ export default function KanbanBoard() {
                                 items={items.map((item) => item.id)}
                                 strategy={verticalListSortingStrategy}
                             >
-                                {items.map((item) => (
-                                    <SortableItem
-                                        key={item.id}
-                                        id={item.id}
-                                        item={item} // Pass the whole item for metadata
-                                    />
-                                ))}
+                                {items.length > 0 ? (
+                                    items.map((item) => (
+                                        <SortableItem
+                                            key={item.id}
+                                            id={item.id}
+                                            item={item}
+                                        />
+                                    ))
+                                ) : (
+                                    <div className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-[#26272b] rounded-lg bg-[#151618]/30">
+                                        <span className="text-[11px] font-medium text-slate-600 uppercase tracking-wider">
+                                            No application
+                                        </span>
+                                    </div>
+                                )}
                             </SortableContext>
                         </div>
                     </div>
