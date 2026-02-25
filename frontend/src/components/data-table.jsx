@@ -29,7 +29,7 @@ const users = [
     { id: 4, name: "Twitter", role: "DevOps", status: "Accepted", appliedOn: "2022-01-04" },
 ];
 
-export default function DataTable() {
+export default function DataTable({ title }) {
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
     const [open, setOpen] = useState(false);
@@ -53,14 +53,16 @@ export default function DataTable() {
                 <CardContent className="space-y-4">
                     {/* Search + Filter */}
                     <div className="flex flex-col sm:flex-row gap-2 justify-between items-center">
-                        <h1 className="text-lg font-semibold px-2 py-2">Latest Applications</h1>
-                        <div className="flex gap-2">
+                        <h1 className="text-lg font-semibold px-2 py-2">{title}</h1>
+
+                        <div className="flex justify-end flex-col sm:flex-row gap-2">
                             <Input
                                 placeholder="Search by name or role..."
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                className="sm:w-1/2"
+                                className="sm:w-1/2 w-full"
                             />
+
 
                             <Select onValueChange={setStatusFilter} defaultValue="all">
                                 <SelectTrigger className="sm:w-48">
@@ -77,18 +79,20 @@ export default function DataTable() {
                             {/* Modal */}
                             <AddApplicationModal open={open} setOpen={setOpen} />
                         </div>
-
                     </div>
+
+
+
 
                     {/* Table */}
                     <div className="rounded-sm">
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Company Name</TableHead>
-                                    <TableHead>Role</TableHead>
-                                    <TableHead>Status</TableHead>
-                                    <TableHead>Applied On</TableHead>
+                                    <TableHead className="text-neutral-400">Company Name</TableHead>
+                                    <TableHead className="text-neutral-400">Role</TableHead>
+                                    <TableHead className="text-neutral-400">Status</TableHead>
+                                    <TableHead className="text-neutral-400">Applied On</TableHead>
                                 </TableRow>
                             </TableHeader>
 
