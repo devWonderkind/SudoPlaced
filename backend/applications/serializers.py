@@ -11,7 +11,11 @@ class ApplicationStatusSerializer(serializers.ModelSerializer):
         read_only_fields = ['is_default']
 
     def create(self, validated_data):
-        user = self.context['request'].user
+        user = validated_data.get('user') or self.context['request'].user
+        
+        if 'user' in validated_data:
+            validated_data.pop('user')
+            
         return ApplicationStatus.objects.create(user=user, **validated_data)
 
 class KeyNoteSerializer(serializers.ModelSerializer):
