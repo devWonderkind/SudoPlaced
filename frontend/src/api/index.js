@@ -21,7 +21,7 @@ api.interceptors.response.use(
           // Attempt to refresh the token using a clean axios instance to avoid loops
           // We use the same base URL and credentials
           await axios.post(
-            `${process.env.NEXT_PUBLIC_API_URL}auth/jwt/refresh/`,
+            `${process.env.NEXT_PUBLIC_API_URL}/auth/jwt/refresh/`,
             { refresh: refreshToken },
             { withCredentials: true }
           );

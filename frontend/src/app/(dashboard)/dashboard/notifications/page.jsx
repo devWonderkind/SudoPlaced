@@ -87,7 +87,7 @@ export default function NotificationsPage() {
   };
 
   return (
-    <div className="flex flex-col h-full space-y-6 p-8 max-w-4xl mx-auto">
+    <div className="flex flex-col h-full space-y-6 mx-auto w-full">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Notifications</h2>
@@ -103,13 +103,13 @@ export default function NotificationsPage() {
         )}
       </div>
 
-      <Card>
+      <Card className={"max-w-2xl px-0"}>
         <CardHeader>
           <CardTitle>Recent Alerts {unreadCount > 0 && <Badge variant="destructive" className="ml-2">{unreadCount} New</Badge>}</CardTitle>
           <CardDescription>You have {notifications.length} total notifications.</CardDescription>
         </CardHeader>
         <CardContent>
-          <ScrollArea className="h-[600px] w-full rounded-md border p-4">
+          <ScrollArea className="h-[600px] w-full rounded-md">
             {isLoading ? (
                <div className="flex justify-center items-center h-20">
                    <Loader2 className="h-6 w-6 animate-spin text-muted-foreground"/>

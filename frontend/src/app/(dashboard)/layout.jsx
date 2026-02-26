@@ -33,7 +33,7 @@ export default function DashboardLayout({ children }) {
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mr-2 h-4" />
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-6">
+        <main className="flex flex-1 flex-col gap-4 p-3 md:p-6">
           {children}
         </main>
       </SidebarInset>

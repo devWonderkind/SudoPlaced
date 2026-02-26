@@ -30,6 +30,33 @@ class ApplicationStatusViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
         
     @action(detail=False, methods=['post'])
+    def restore_defaults(self, request):
+        """
+        Create default statuses for the user if they don't exist.
+        """
+        DEFAULT_STATUSES = [
+            ('Bookmarked', 0),
+            ('Applied', 1),
+            ('Assessment', 2),
+            ('Interviewing', 3),
+            ('Offered', 4),
+            ('Rejected', 5),
+            ('Ghosted', 6),
+        ]
+        
+        created_count = 0
+        for name, order in DEFAULT_STATUSES:
+            status, created = ApplicationStatus.objects.get_or_create(
+                user=request.user, 
+                name=name, 
+                defaults={'order': order, 'is_default': True}
+            )
+            if created:
+                created_count += 1
+                
+        return Response({'status': f'Created {created_count} default statuses'})
+
+    @action(detail=False, methods=['post'])
     def reorder(self, request):
         """
         Bulk update order of statuses.

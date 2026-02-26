@@ -78,11 +78,6 @@ const data = {
   ],
   quickAccess: [
     {
-      name: 'Notifications',
-      url: '/dashboard/notifications',
-      icon: Bell,
-    },
-    {
       name: 'Contacts',
       url: '/dashboard/directory',
       icon: Contact,

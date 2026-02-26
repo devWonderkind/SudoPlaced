@@ -88,8 +88,16 @@ class JobApplicationDetailSerializer(serializers.ModelSerializer):
     def validate_status(self, value):
         user = self.context['request'].user
         if value and value.user != user:
-             raise serializers.ValidationError("Invalid status. You can only assign statuses that belong to you.")
+             raise serializers.ValidationError("Invalid status. You can only assign statuses that belong to your account.")
         return value
+
+    def to_internal_value(self, data):
+        # Allow passing status as integer ID or null
+        if 'status' in data:
+            if data['status'] == "":
+                data['status'] = None
+        return super().to_internal_value(data)
+
 
     def validate_hr_contact_ids(self, value):
 
@@ -118,6 +126,7 @@ class JobApplicationDetailSerializer(serializers.ModelSerializer):
         
         # Determine default status if not provided or None
         if 'status' not in validated_data or validated_data['status'] is None:
+             # Try 'Bookmarked' first, else lowest ordered status
              default_status = ApplicationStatus.objects.filter(user=user, name='Bookmarked').first()
              if not default_status:
                  default_status = ApplicationStatus.objects.filter(user=user).order_by('order').first()
@@ -125,7 +134,15 @@ class JobApplicationDetailSerializer(serializers.ModelSerializer):
              if default_status:
                  validated_data['status'] = default_status
         
-        application = JobApplication.objects.create(user=user, **validated_data)
+        # 'user' is passed to save() via perform_create usually, 
+        # but if we use .create() here directly, we must ensure it's set.
+        # But `perform_create` in ViewSet calls `serializer.save(user=request.user)`.
+        # When `save` is called with kwarg, it adds it to validated_data.
+        # So `user` should be in validated_data if passed from view.
+        if 'user' not in validated_data:
+             validated_data['user'] = user
+
+        application = JobApplication.objects.create(**validated_data)
         
         if hr_contact_ids:
             application.hr_contacts.set(hr_contact_ids)

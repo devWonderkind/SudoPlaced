@@ -110,7 +110,7 @@ export function FormBuilder({
                           return (
                             <Select
                               onValueChange={formField.onChange}
-                              defaultValue={formField.value}
+                              value={formField.value}
                               disabled={disabled || isSubmitting}
                             >
                               <FormControl>
@@ -127,6 +127,19 @@ export function FormBuilder({
                               </SelectContent>
                             </Select>
                           );
+                        }
+
+                        if (type === "custom") {
+                             const CustomComponent = field.component;
+                             return (
+                                 <CustomComponent 
+                                    value={formField.value}
+                                    onChange={formField.onChange}
+                                    placeholder={placeholder}
+                                    disabled={disabled || isSubmitting}
+                                    {...formField}
+                                 />
+                             )
                         }
 
                         // Default: Text, Email, Number, Url, etc.
