@@ -20,46 +20,35 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Add to Known Hosts
+      - name: Add Server to Known Hosts
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
 
-      - name: "Step 1: Update Source Code"
+      - name: Execute Remote Deployment
         run: |
-          ssh $USER@$HOST << 'EOF'
+          # Use -q to suppress login banners and BatchMode for non-interactive execution
+          ssh -q -o BatchMode=yes $USER@$HOST << 'EOF'
             set -e
+            
+            echo "[1/4] Updating source code..."
             cd /var/www/sudoplaced
-            git fetch origin main
+            git fetch -q origin main
             git reset --hard origin/main
             git clean -fd
-          EOF
 
-      - name: "Step 2: Sync Dependencies (UV)"
-        run: |
-          ssh $USER@$HOST << 'EOF'
-            set -e
-            cd /var/www/sudoplaced/backend
+            echo "[2/4] Synchronizing dependencies..."
+            cd backend
             export PATH="$HOME/.local/bin:$PATH"
-            # Remove old .venv if it was owned by another user (only needed once)
-            # rm -rf .venv 
-            uv sync --frozen
-          EOF
+            uv sync --frozen --quiet
 
-      - name: "Step 3: Database Migrations & Static Files"
-        run: |
-          ssh $USER@$HOST << 'EOF'
-            set -e
-            cd /var/www/sudoplaced/backend
-            export PATH="$HOME/.local/bin:$PATH"
-            uv run manage.py migrate
-            uv run manage.py collectstatic --noinput
-          EOF
+            echo "[3/4] Running database migrations and collecting static files..."
+            uv run manage.py migrate --noinput
+            uv run manage.py collectstatic --noinput > /dev/null
 
-      - name: "Step 4: Restart Services"
-        run: |
-          ssh $USER@$HOST << 'EOF'
-            set -e
+            echo "[4/4] Restarting application services..."
             sudo systemctl restart gunicorn
             sudo systemctl restart nginx
+            
+            echo "Deployment completed successfully."
           EOF
