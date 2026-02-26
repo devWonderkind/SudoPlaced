@@ -10,9 +10,8 @@ api.interceptors.response.use(
   (error) => {
     // If the backend says the token is invalid (401)
     if (error.response?.status === 401) {
-      // Avoid redirect loops on the login page itself
-      if (!window.location.pathname.includes('/login')) {
-         // You could also trigger a logout function here from a global state
+      // Only redirect if the user is currently on a dashboard page
+      if (window.location.pathname.startsWith('/dashboard')) {
          console.warn("Session expired. Redirecting...");
          window.location.href = '/login'; 
       }

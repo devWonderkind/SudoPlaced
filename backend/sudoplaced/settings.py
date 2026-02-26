@@ -193,7 +193,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
 SOCIAL_AUTH_FIELDS_STORED_IN_SESSION = []
 SOCIAL_AUTH_GOOGLE_OAUTH2_STATE_PARAMETER = False
 
-EMAIL_BACKEND = env('EMAIL_BACKEND', default='EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend')
+EMAIL_BACKEND = env('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
 EMAIL_HOST = env('EMAIL_HOST', default='smtp.gmail.com')
 EMAIL_PORT = env.int('EMAIL_PORT', default=587)
 EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS', default=True)
