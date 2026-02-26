@@ -133,6 +133,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'static'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -169,7 +170,7 @@ DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': 'reset-password?uid={uid}&token={token}'  , # Frontend URL
     'SEND_PASSWORD_RESET_EMAIL': True,
     'SOCIAL_AUTH_TOKEN_STRATEGY': 'djoser.social.token.jwt.TokenStrategy',
-    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': ['http://localhost:3000/google'],
+    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': env.list('SOCIAL_AUTH_ALLOWED_REDIRECT_URIS', default=['http://localhost:3000/google']),
     'SERIALIZERS': {
         'user_create': 'accounts.serializers.CustomUserCreateSerializer',
         'user': 'accounts.serializers.CustomUserSerializer',
@@ -195,7 +196,9 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_STATE_PARAMETER = False
 EMAIL_BACKEND = env('EMAIL_BACKEND')
 
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
-DOMAIN = 'localhost:3000' 
-SITE_NAME = 'Sudo Placed'
+CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=["http://localhost:3000"])
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=["http://localhost:3000"])
+
+DOMAIN = env('DOMAIN', default='localhost:3000')
+SITE_NAME = env('SITE_NAME', default='Sudo Placed')
 
