@@ -24,7 +24,27 @@ class ApplicationStatusViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
-        return ApplicationStatus.objects.filter(user=self.request.user).order_by('order')
+        queryset = ApplicationStatus.objects.filter(user=self.request.user).order_by('order')
+        if not queryset.exists():
+            # Auto-create defaults if none exist
+            DEFAULT_STATUSES = [
+                ('Bookmarked', 0),
+                ('Applied', 1),
+                ('Assessment', 2),
+                ('Interviewing', 3),
+                ('Offered', 4),
+                ('Rejected', 5),
+                ('Ghosted', 6),
+            ]
+            statuses = [
+                ApplicationStatus(user=self.request.user, name=name, order=order, is_default=True)
+                for name, order in DEFAULT_STATUSES
+            ]
+            ApplicationStatus.objects.bulk_create(statuses)
+            # Refetch
+            queryset = ApplicationStatus.objects.filter(user=self.request.user).order_by('order')
+            
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
