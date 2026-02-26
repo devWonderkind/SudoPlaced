@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Plus, List, Loader2, Kanban } from 'lucide-react';
+import { Plus, List, Kanban } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -142,21 +142,6 @@ export default function ApplicationsPage() {
     setIsDialogOpen(true);
   };
 
-  const handleKanbanDrop = async (movedApplication, newStatusId) => {
-    try {
-      await updateApplication(movedApplication.id, {
-        // The Kanban board now passes the status ID back.
-        // We parse it as an int for your backend!
-        status: parseInt(newStatusId),
-      });
-      toast.success('Application moved successfully');
-      fetchData(); // Sync with backend
-    } catch (error) {
-      console.error('Failed to update status:', error);
-      toast.error('Failed to move application');
-      fetchData(); // Snap back to original position if API fails
-    }
-  };
   const openEditDialog = (app) => {
     setSelectedApplication(app);
     setIsDialogOpen(true);
@@ -168,7 +153,7 @@ export default function ApplicationsPage() {
   };
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
+    <div className="w-full mx-auto max-w-7xl space-y-6">
       {/* Header */}
       <div className="flex flex-col flex-wrap items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div>
@@ -219,14 +204,7 @@ export default function ApplicationsPage() {
         />
       ) : (
         <div className="overflow-x-auto pb-4">
-          <KanbanBoard
-            applications={applications}
-            onStatusChange={handleKanbanDrop}
-            onView={(app) => {
-              setSelectedDetailApp(app);
-              setDetailDialogOpen(true);
-            }}
-          />
+          <KanbanBoard />
         </div>
       )}
 
