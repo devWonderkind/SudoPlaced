@@ -1,14 +1,21 @@
+"use client"
+
+import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import InterviewList from "@/components/interview-card";
+import InterviewModal from "@/components/interviewScheduleModal";
 export default function InterviewSchedulePage() {
+    const [showModal, setShowModal] = useState(false);
+    const [interviews, setInterviews] = useState([]);
+
+
     return (
         <div className="p-2 space-y-6 border rounded-md w-full h-full">
-
-            <Tabs defaultValue="schedule" className="">
-                <div className="flex justify-between p-2 space-y-6">
-                    <TabsList>
+            <Tabs defaultValue="schedule">
+                <div className="flex justify-between sm:flex-row flex-col ml-6 p-2 space-y-6">
+                    <TabsList className="w-full sm:w-auto">
                         <TabsTrigger value="schedule">Schedule
                             <Badge className="bg-yellow-500 rounded-sm">3</Badge>
                         </TabsTrigger>
@@ -25,8 +32,8 @@ export default function InterviewSchedulePage() {
                             <Badge className="bg-red-500 rounded-sm">2</Badge>
                         </TabsTrigger>
                     </TabsList>
-                    <div className="flex justify-end">
-                        <Button>Create Interview</Button>
+                    <div className="flex justify-end sm:justify-start">
+                        <InterviewModal open={showModal} setOpen={setShowModal} onClose={() => setShowModal(false)} />
                     </div>
                 </div>
                 <TabsContent value="schedule">

@@ -30,6 +30,7 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${poppins.variable} antialiased`}
+        suppressHydrationWarning
       >
         <Providers>
           <div className="absolute top-4 right-4 z-50">

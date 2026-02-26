@@ -31,7 +31,7 @@ import {
 } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 
-export default function CreateInterviewModal({ open, onOpenChange, onClose }) {
+export default function CreateInterviewModal({ open, onClose, setOpen }) {
     const [date, setDate] = useState(new Date());
     const [searchTerm, setSearchTerm] = useState("");
 
@@ -49,9 +49,9 @@ export default function CreateInterviewModal({ open, onOpenChange, onClose }) {
     );
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
+        <Dialog open={open} onOpenChange={setOpen} >
             <DialogTrigger asChild>
-                <Button>Create Interview</Button>
+                <Button onClick={() => setOpen(true)}>Create Interview</Button>
             </DialogTrigger>
             <DialogContent className="p-0 gap-0 overflow-hidden border-none sm:rounded-2xl">
                 <div className="flex flex-col md:flex-row h-full max-h-[90vh]">
