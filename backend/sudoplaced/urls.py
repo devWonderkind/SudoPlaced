@@ -16,6 +16,9 @@ admin.site.site_url = f"https://{DOMAIN}"
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/', include('accounts.urls')),
+    path('api/', include('applications.urls')),
+    path('api/directory/', include('directory.urls')),
+    path('api/', include('notifications.urls')),
 ]
 
 if settings.DEBUG:

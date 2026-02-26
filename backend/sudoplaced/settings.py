@@ -56,6 +56,11 @@ INSTALLED_APPS = [
 
     # apps
     'accounts',
+    'directory',
+    'applications',
+    'notifications',
+    'django_extensions',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -75,7 +80,7 @@ ROOT_URLCONF = 'sudoplaced.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -155,6 +160,7 @@ REST_FRAMEWORK = {
         'accounts.authenticate.CustomJWTAuthentication',
     #   'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_PAGINATION_CLASS': 'sudoplaced.pagination.StandardResultsSetPagination',
 }
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('JWT',),
