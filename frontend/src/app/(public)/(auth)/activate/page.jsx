@@ -1,25 +1,32 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import React, { useEffect, useState, Suspense } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { activateUser } from '@/api/auth'; 
 import { toast } from 'sonner';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { IconLoader2, IconCircleCheck, IconCircleX, IconArrowRight } from '@tabler/icons-react';
 
-export default function ActivationPage() {
-  const { uid, token } = useParams();
+function ActivationContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const uid = searchParams.get('uid');
+  const token = searchParams.get('token');
   const [status, setStatus] = useState('loading'); 
 
   useEffect(() => {
-    const triggerActivation = async () => {1
+    const triggerActivation = async () => {
       try {
-        const [response] = await Promise.all([
-          activateUser(uid, token),
-          new Promise(resolve => setTimeout(resolve, 1500))
-        ]);
+        if (!uid || !token) {
+           setStatus('error');
+           toast.error("Invalid activation link.");
+           return;
+        }
+
+        // Just call activate; removed artificial delay for UX unless really needed, 
+        // kept minimal logic to match original intent
+        await activateUser(uid, token);
         
         setStatus('success');
         toast.success("Account activated! Welcome to Sudo Placed.");
@@ -30,16 +37,13 @@ export default function ActivationPage() {
       }
     };
 
-    if (uid && token) {
-      triggerActivation();
-    }
+    triggerActivation();
   }, [uid, token]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md border-border bg-card/60 backdrop-blur-xl text-center shadow-2xl">
+    <Card className="w-full max-w-md border-border bg-card/60 backdrop-blur-xl text-center shadow-2xl">
         <CardHeader>
-          <CardTitle className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-muted-foreground">
+          <CardTitle className="text-3xl font-bold bg-clip-text text-transparent bg-linear-to-r from-foreground to-muted-foreground">
             Activation
           </CardTitle>
           <CardDescription>Finalizing your Sudo Placed account</CardDescription>
@@ -62,7 +66,7 @@ export default function ActivationPage() {
               <div className="space-y-2">
                 <h3 className="text-2xl font-bold text-foreground">Email Verified</h3>
                 <p className="text-muted-foreground text-sm px-4">
-                  Your account is now fully active. You're ready to start tracking your placement journey.
+                  Your account is now fully active. You&apos;re ready to start tracking your placement journey.
                 </p>
               </div>
               {/* Manual Redirect Button */}
@@ -99,6 +103,15 @@ export default function ActivationPage() {
 
         </CardContent>
       </Card>
+  );
+}
+
+export default function ActivationPage() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+      <Suspense fallback={<div className="text-center">Loading...</div>}>
+         <ActivationContent />
+      </Suspense>
     </div>
   );
 }

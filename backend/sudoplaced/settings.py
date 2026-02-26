@@ -164,9 +164,9 @@ DJOSER = {
     'LOGIN_FIELD': 'email',
     'USER_CREATE_PASSWORD_RETYPE': True,
     'SEND_ACTIVATION_EMAIL': True,
-    'ACTIVATION_URL': 'activate/{uid}/{token}', # Your frontend URL
+    'ACTIVATION_URL': 'activate?uid={uid}&token={token}', # Your frontend URL
     'SET_PASSWORD_RETYPE': True,
-    'PASSWORD_RESET_CONFIRM_URL': 'reset-password/{uid}/{token}', # Frontend URL
+    'PASSWORD_RESET_CONFIRM_URL': 'reset-password?uid={uid}&token={token}'  , # Frontend URL
     'SEND_PASSWORD_RESET_EMAIL': True,
     'SOCIAL_AUTH_TOKEN_STRATEGY': 'djoser.social.token.jwt.TokenStrategy',
     'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': ['http://localhost:3000/google'],
