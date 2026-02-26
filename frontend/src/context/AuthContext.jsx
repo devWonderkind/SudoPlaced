@@ -39,6 +39,9 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (values) => {
     const res = await loginUser(values);
+    if (res.data?.refresh) {
+      localStorage.setItem('refresh', res.data.refresh);
+    }
     const { data } = await fetchMe();
     setUser(data);
     router.push('/dashboard');
@@ -54,6 +57,9 @@ export const AuthProvider = ({ children }) => {
   const googleLogin = async (accessToken) => {
     try {
       const res = await googleLoginUser(accessToken);
+      if (res.data?.refresh) {
+        localStorage.setItem('refresh', res.data.refresh);
+      }
       // Depending on your backend response, you might need to call fetchMe() 
       // here too if the social login only returns tokens and not user data.
       setUser(res.data.user || res.data); 
@@ -106,6 +112,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await logoutUser();
     } finally {
+      localStorage.removeItem('refresh');
       setUser(null);
       toast.success('Logged out successfully');
       router.push('/login');

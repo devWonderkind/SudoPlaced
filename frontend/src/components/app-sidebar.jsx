@@ -13,7 +13,8 @@ import {
   Search,
   CheckCircle2,
   StickyNote,
-  Bell
+  Bell,
+  Contact
 
 } from 'lucide-react';
 
@@ -78,7 +79,17 @@ const data = {
   quickAccess: [
     {
       name: 'Notifications',
-      url: '#',
+      url: '/dashboard/notifications',
+      icon: Bell,
+    },
+    {
+      name: 'Contacts',
+      url: '/dashboard/directory',
+      icon: Contact,
+    },
+    {
+      name: 'Notifications',
+      url: '/dashboard/notifications',
       icon: Bell,
     },
     {
