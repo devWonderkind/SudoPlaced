@@ -26,14 +26,14 @@ export function ApplicationForm({ defaultValues, onSubmit, isSubmitting, applica
   // Combine defaultValues (from list) with applicationData (full details)
   const initialValues = useMemo(() => {
     if (applicationId && applicationData) {
-        // Prepare data for form
-        return {
-            ...defaultValues,
-            ...applicationData,
-            status: applicationData.status?.toString() || "", // Convert status ID to string for Select
-            hr_contact_ids: applicationData.hr_contacts?.map(c => c.id) || [], // Extract IDs
-            applied_on: applicationData.applied_on || "", // Ensure date string
-        };
+      // Prepare data for form
+      return {
+        ...defaultValues,
+        ...applicationData,
+        status: applicationData.status?.toString() || "", // Convert status ID to string for Select
+        hr_contact_ids: applicationData.hr_contacts?.map(c => c.id) || [], // Extract IDs
+        applied_on: applicationData.applied_on || "", // Ensure date string
+      };
     }
     return defaultValues;
   }, [applicationId, applicationData, defaultValues]);
@@ -45,11 +45,11 @@ export function ApplicationForm({ defaultValues, onSubmit, isSubmitting, applica
     })) || [];
 
   if (applicationId && isLoadingApplication) {
-      return (
-          <div className="flex h-40 items-center justify-center">
-              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-          </div>
-      )
+    return (
+      <div className="flex h-40 items-center justify-center">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
+    )
   }
 
   const fields = [
@@ -71,7 +71,6 @@ export function ApplicationForm({ defaultValues, onSubmit, isSubmitting, applica
       type: "select",
       options: statusOptions,
       placeholder: "Select Status",
-      description: "Default statuses will be created automatically.",
       colSpan: 1,
     },
     {
@@ -109,7 +108,7 @@ export function ApplicationForm({ defaultValues, onSubmit, isSubmitting, applica
       placeholder: "https://...",
       colSpan: 2,
     },
-     {
+    {
       name: "applied_on",
       label: "Applied On",
       type: "date", // Assumes FormBuilder handles generic input types
@@ -130,7 +129,7 @@ export function ApplicationForm({ defaultValues, onSubmit, isSubmitting, applica
     <FormBuilder
       schema={applicationSchema}
       defaultValues={initialValues} // Pass the fetched values
-      onSubmit={onSubmit} 
+      onSubmit={onSubmit}
       fields={fields}
       isSubmitting={isSubmitting}
       submitLabel="Save Application"

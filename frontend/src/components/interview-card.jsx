@@ -129,7 +129,7 @@ export default function InterviewList() {
     ];
 
     return (
-        <div className="w-full p-6 min-h-screen">
+        <div className="w-full min-h-screen">
             {interviews.map((item) => (
                 <InterviewCard key={item.id} {...item} />
             ))}

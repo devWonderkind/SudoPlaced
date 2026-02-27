@@ -155,12 +155,12 @@ export default function ApplicationsPage() {
   return (
     <div className="w-full mx-auto max-w-7xl space-y-6">
       {/* Header */}
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight">Applications</h1>
+        <p className="text-sm text-muted-foreground">Manage your job applications and track progress.</p>
+      </div>
       <div className="flex flex-col flex-wrap items-start justify-between gap-4 sm:flex-row sm:items-center">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Applications</h1>
-          <p className="text-muted-foreground">Manage your job applications and track progress.</p>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex items-center gap-2">
           <Tabs value={viewMode} onValueChange={setViewMode} className="w-[200px]">
             <TabsList className="grid grid-cols-2">
               <TabsTrigger value="table">
@@ -173,6 +173,8 @@ export default function ApplicationsPage() {
               </TabsTrigger>
             </TabsList>
           </Tabs>
+        </div>
+        <div className="flex items-center gap-2">
           <StatusManager />
           <Button onClick={openCreateDialog}>
             <Plus className="mr-2 h-4 w-4" /> Add Application
@@ -222,21 +224,21 @@ export default function ApplicationsPage() {
           defaultValues={
             selectedApplication
               ? {
-                  ...selectedApplication,
-                  status: selectedApplication.status?.toString() || '',
-                }
+                ...selectedApplication,
+                status: selectedApplication.status?.toString() || '',
+              }
               : {
-                  role_title: '',
-                  company_name: '',
-                  status: '',
-                  work_mode: 'Remote',
-                  expected_salary: '',
-                  job_url: '',
-                  company_logo: '',
-                  location: '',
-                  applied_on: new Date().toISOString().split('T')[0],
-                  hr_contact_ids: [],
-                }
+                role_title: '',
+                company_name: '',
+                status: '',
+                work_mode: 'Remote',
+                expected_salary: '',
+                job_url: '',
+                company_logo: '',
+                location: '',
+                applied_on: new Date().toISOString().split('T')[0],
+                hr_contact_ids: [],
+              }
           }
           onSubmit={(data) => {
             const payload = {

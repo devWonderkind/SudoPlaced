@@ -27,8 +27,9 @@ import {
 import { format } from "date-fns";
 import {
     IconCalendar,
-    IconVideo, IconLink
+    IconVideo, IconLink,
 } from "@tabler/icons-react";
+import { Plus } from 'lucide-react';
 import { cn } from "@/lib/utils";
 
 export default function CreateInterviewModal({ open, onClose, setOpen }) {
@@ -51,7 +52,9 @@ export default function CreateInterviewModal({ open, onClose, setOpen }) {
     return (
         <Dialog open={open} onOpenChange={setOpen} >
             <DialogTrigger asChild>
-                <Button onClick={() => setOpen(true)}>Create Interview</Button>
+                <Button onClick={() => setOpen(true)}>
+                    <Plus />
+                    Create Interview</Button>
             </DialogTrigger>
             <DialogContent className="p-0 gap-0 overflow-hidden border-none sm:rounded-2xl">
                 <div className="flex flex-col md:flex-row h-full max-h-[90vh]">

@@ -44,7 +44,7 @@ export function ApplicationDetailDialog({ applicationId, open, onOpenChange }) {
           </div>
         ) : (
           <>
-            <DialogHeader className="p-6 pb-2">
+            <DialogHeader className="p-6 pb-2 m-4">
               <div className="flex items-start gap-4">
                 <Avatar className="h-16 w-16 border bg-white shadow-sm">
                   <AvatarImage src={application.company_logo} className="object-contain p-2" />

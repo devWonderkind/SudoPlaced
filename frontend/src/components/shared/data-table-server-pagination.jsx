@@ -32,7 +32,7 @@ export function DataTableServerPagination({
   data,
   pageCount,
   rowCount,
-  state: { pagination, sorting, globalFilter }, 
+  state: { pagination, sorting, globalFilter },
   onPaginationChange,
   onSortingChange,
   onGlobalFilterChange,
@@ -57,7 +57,7 @@ export function DataTableServerPagination({
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
     manualSorting: true,
-    manualFiltering: true, 
+    manualFiltering: true,
   });
 
   return (
@@ -85,9 +85,9 @@ export function DataTableServerPagination({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}
@@ -98,9 +98,9 @@ export function DataTableServerPagination({
             {isLoading ? (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                   <div className="flex justify-center items-center gap-2">
-                     <Loader2 className="h-4 w-4 animate-spin" /> Loading...
-                   </div>
+                  <div className="flex justify-center items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" /> Loading...
+                  </div>
                 </TableCell>
               </TableRow>
             ) : table.getRowModel().rows?.length ? (
@@ -128,13 +128,22 @@ export function DataTableServerPagination({
       </div>
 
       {/* Pagination Controls */}
-      <div className="flex items-center justify-between px-2">
-        <div className="flex-1 text-sm text-muted-foreground">
-           Total {rowCount} rows
-        </div>
-        <div className="flex items-center space-x-6 lg:space-x-8">
-          <div className="flex items-center space-x-2">
-            <p className="text-sm font-medium">Rows per page</p>
+      <div className="flex flex-col gap-4 px-2 sm:flex-row sm:items-center sm:justify-between">
+
+        {/* LEFT SIDE */}
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-6">
+
+          {/* Total Rows */}
+          <div className="text-sm text-muted-foreground">
+            Total {rowCount} rows
+          </div>
+
+          {/* Rows Per Page */}
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-medium whitespace-nowrap">
+              Rows per page
+            </p>
+
             <Select
               value={`${pagination.pageSize}`}
               onValueChange={(value) => {
@@ -144,6 +153,7 @@ export function DataTableServerPagination({
               <SelectTrigger className="h-8 w-[70px]">
                 <SelectValue placeholder={pagination.pageSize} />
               </SelectTrigger>
+
               <SelectContent side="top">
                 {[10, 20, 30, 40, 50].map((pageSize) => (
                   <SelectItem key={pageSize} value={`${pageSize}`}>
@@ -152,48 +162,60 @@ export function DataTableServerPagination({
                 ))}
               </SelectContent>
             </Select>
+
           </div>
-          <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+        </div>
+
+        {/* RIGHT SIDE */}
+        <div className="flex items-center gap-3 sm:gap-4">
+
+          {/* Page Count (reduced width + gap) */}
+          <div className="text-sm font-medium whitespace-nowrap">
             Page {table.getState().pagination.pageIndex + 1} of{" "}
             {table.getPageCount()}
           </div>
-          <div className="flex items-center space-x-2">
+
+          {/* Controls */}
+          <div className="flex items-center gap-1">
+
             <Button
               variant="outline"
               className="hidden h-8 w-8 p-0 lg:flex"
               onClick={() => table.setPageIndex(0)}
               disabled={!table.getCanPreviousPage()}
             >
-              <span className="sr-only">Go to first page</span>
               <ChevronsLeft className="h-4 w-4" />
             </Button>
+
             <Button
               variant="outline"
               className="h-8 w-8 p-0"
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
-              <span className="sr-only">Go to previous page</span>
               <ChevronLeft className="h-4 w-4" />
             </Button>
+
             <Button
               variant="outline"
               className="h-8 w-8 p-0"
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
-              <span className="sr-only">Go to next page</span>
               <ChevronRight className="h-4 w-4" />
             </Button>
+
             <Button
               variant="outline"
               className="hidden h-8 w-8 p-0 lg:flex"
-              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+              onClick={() =>
+                table.setPageIndex(table.getPageCount() - 1)
+              }
               disabled={!table.getCanNextPage()}
             >
-              <span className="sr-only">Go to last page</span>
               <ChevronsRight className="h-4 w-4" />
             </Button>
+
           </div>
         </div>
       </div>
