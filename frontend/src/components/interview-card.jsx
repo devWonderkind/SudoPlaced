@@ -1,5 +1,6 @@
 "use client";
 import React from 'react';
+import Link from 'next/link';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -11,7 +12,8 @@ import {
     IconMessageCircle2,
     IconChevronDown,
     IconBuildingCommunity,
-    IconBriefcase
+    IconBriefcase,
+    IconNotebook
 } from '@tabler/icons-react';
 
 const InterviewCard = ({
@@ -27,6 +29,7 @@ const InterviewCard = ({
     colorSide
 }) => {
     const isOverdue = status === "Overdue";
+    const isCompleted = status === "Completed";
 
     return (
         <Card className="relative overflow-hidden border-l-0 mb-2 shadow-sm">
@@ -40,7 +43,7 @@ const InterviewCard = ({
                         <Badge
                             variant="secondary"
                             className={`flex items-center gap-1 px-2 py-0.5 rounded-md font-medium text-xs
-                ${isOverdue ? 'bg-red-100 text-red-700' : 'bg-indigo-100 text-indigo-700'}`}
+                ${isOverdue ? 'bg-red-100 text-red-700' : isCompleted ? 'bg-green-100 text-green-700' : 'bg-indigo-100 text-indigo-700'}`}
                         >
                             {isOverdue ? <IconAlertCircle size={14} /> : <IconCalendarEvent size={14} />}
                             {status}
@@ -99,6 +102,20 @@ const InterviewCard = ({
                         </div>
                     </div>
                 </div>
+
+                {/* ADD KEYNOTES BUTTON for Completed interviews */}
+                {isCompleted && (
+                    <div className="absolute top-3 right-3 z-10">
+                        <Link
+                            href={`/dashboard/keynotes/${id}`}
+                            className="group flex items-center gap-1.5 px-3 py-1.5 border border-border/60 bg-primary/10 text-primary rounded-full text-xs font-semibold shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
+                            title="Add Keynotes"
+                        >
+                            <IconNotebook size={14} className="transition-transform duration-200 group-hover:rotate-6" />
+                            Add Keynotes
+                        </Link>
+                    </div>
+                )}
             </CardContent>
         </Card>
     );
@@ -125,6 +142,28 @@ export default function InterviewList() {
             interviewer: "Devang Shaurya",
             companyName: "Microsoft",
             role: "Software Engineer"
+        },
+        {
+            id: 3,
+            time: "10:00 AM – 11:00 AM",
+            status: "Completed",
+            type: "Technical",
+            timezone: "GMT+5:30",
+            duration: "1 hour",
+            interviewer: "Rahul Sharma",
+            companyName: "Amazon",
+            role: "Frontend Developer"
+        },
+        {
+            id: 4,
+            time: "3:00 PM – 4:00 PM",
+            status: "Completed",
+            type: "HR Round",
+            timezone: "GMT+5:30",
+            duration: "1 hour",
+            interviewer: "Priya Patel",
+            companyName: "Meta",
+            role: "Product Engineer"
         }
     ];
 

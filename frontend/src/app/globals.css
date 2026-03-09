@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Path to installed @blocknote/shadcn package for Tailwind scanning */
+@source "../../node_modules/@blocknote/shadcn";
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -171,5 +174,10 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* BlockNote shadcn editor border styles */
+  .bn-shadcn * {
+    @apply border-border outline-ring/50;
   }
 }
