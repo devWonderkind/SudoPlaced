@@ -107,7 +107,7 @@ const InterviewCard = ({
                 {isCompleted && (
                     <div className="absolute top-3 right-3 z-10">
                         <Link
-                            href={`/dashboard/keynotes/${id}`}
+                            href={`/dashboard/keynotes?interviewId=${id}`}
                             className="group flex items-center gap-1.5 px-3 py-1.5 border border-border/60 bg-primary/10 text-primary rounded-full text-xs font-semibold shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
                             title="Add Keynotes"
                         >
