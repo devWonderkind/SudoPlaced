@@ -15,6 +15,7 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   Building2,
@@ -103,7 +104,7 @@ export function ApplicationDetailDialog({ applicationId, open, onOpenChange }) {
                     value="notes"
                     className="data-[state=active]:border-primary rounded-none border-b-2 border-transparent px-4 py-2 data-[state=active]:shadow-none"
                   >
-                    Notes
+                    Notes ({application.notes?.length || 0})
                   </TabsTrigger>
                 </TabsList>
               </div>
@@ -160,7 +161,45 @@ export function ApplicationDetailDialog({ applicationId, open, onOpenChange }) {
                 </TabsContent>
 
                 <TabsContent value="notes" className="mt-0">
-                  <p className="text-muted-foreground text-sm">Notes functionality coming soon.</p>
+                  <div className="flex flex-col gap-4">
+                    <div className="flex justify-between items-center bg-muted/20 p-3 rounded-lg border border-border/50">
+                      <p className="text-sm text-muted-foreground">Keynotes linked to this application</p>
+                      <Button 
+                        size="sm" 
+                        variant="secondary"
+                        onClick={() => {
+                          onOpenChange(false);
+                          window.location.href = `/dashboard/keynotes?applicationId=${application.id}&noteId=new`;
+                        }}
+                      >
+                        Add Keynote
+                      </Button>
+                    </div>
+
+                    {application.notes?.length > 0 ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {application.notes.map((note) => (
+                          <div 
+                            key={note.id} 
+                            onClick={() => {
+                                onOpenChange(false);
+                                window.location.href = `/dashboard/keynotes?noteId=${note.id}`;
+                            }}
+                            className="p-4 border rounded-xl hover:border-primary/50 cursor-pointer transition-colors bg-card shadow-sm"
+                          >
+                            <h4 className="font-medium text-sm line-clamp-1 mb-1">{note.title || 'Untitled Note'}</h4>
+                            <p className="text-xs text-muted-foreground">
+                              Modified: {new Date(note.modified).toLocaleDateString()}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-8">
+                        <p className="text-muted-foreground text-sm">No keynotes yet.</p>
+                      </div>
+                    )}
+                  </div>
                 </TabsContent>
               </ScrollArea>
             </Tabs>

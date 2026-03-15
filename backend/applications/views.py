@@ -106,7 +106,8 @@ class KeyNoteViewSet(viewsets.ModelViewSet):
     search_fields = ['title', 'content_markdown']
     ordering_fields = ['created', 'modified']
     ordering = ['-is_pinned', '-modified']
-
+    read_only_fields = ['user']
+    
     def get_queryset(self):
         return KeyNote.objects.filter(user=self.request.user)
 
