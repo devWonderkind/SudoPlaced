@@ -12,7 +12,7 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
@@ -27,6 +27,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import Link from 'next/link';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 
 export function ApplicationDetailDialog({ applicationId, open, onOpenChange }) {
   const { data: application, isLoading } = useQuery({
@@ -38,15 +39,15 @@ export function ApplicationDetailDialog({ applicationId, open, onOpenChange }) {
   if (!applicationId && !open) return null;
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[90vh] max-w-3xl flex-col gap-0 p-0">
+    <Sheet open={open} onOpenChange={onOpenChange} className="w-full">
+      <SheetContent side="right" className="w-full overflow-y-auto p-2 sm:max-w-[540px] sm:p-4">
         {isLoading || !application ? (
           <div className="flex h-[300px] items-center justify-center">
             <Loader2 className="text-muted-foreground h-8 w-8 animate-spin" />
           </div>
         ) : (
           <>
-            <DialogHeader className="m-4 p-6 pb-2">
+            <SheetHeader className="m-4 p-6 pb-2">
               <div className="flex items-start gap-4">
                 <Avatar className="h-16 w-16 border bg-white shadow-sm">
                   <AvatarImage src={application.company_logo} className="object-contain p-2" />
@@ -55,7 +56,7 @@ export function ApplicationDetailDialog({ applicationId, open, onOpenChange }) {
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
-                  <DialogTitle className="text-2xl font-bold">{application.role_title}</DialogTitle>
+                  <SheetTitle className="text-2xl font-bold">{application.role_title}</SheetTitle>
                   <div className="text-muted-foreground flex items-center gap-2 text-lg font-medium">
                     {application.company_name}
                     {application.job_url && (
@@ -77,38 +78,43 @@ export function ApplicationDetailDialog({ applicationId, open, onOpenChange }) {
                   {application.status_label || 'Unknown'}
                 </Badge>
               </div>
-            </DialogHeader>
+            </SheetHeader>
 
             <Tabs defaultValue="details" className="flex min-h-0 flex-1 flex-col">
-              <div className="px-6">
-                <TabsList className="h-auto w-full justify-start space-x-6 rounded-none border-b bg-transparent p-0">
-                  <TabsTrigger
-                    value="details"
-                    className="data-[state=active]:border-primary rounded-none border-b-2 border-transparent px-4 py-2 data-[state=active]:shadow-none"
-                  >
-                    Details
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="timeline"
-                    className="data-[state=active]:border-primary rounded-none border-b-2 border-transparent px-4 py-2 data-[state=active]:shadow-none"
-                  >
-                    Timeline
-                  </TabsTrigger>{' '}
-                  {/* Placeholder for History */}
-                  <TabsTrigger
-                    value="contacts"
-                    className="data-[state=active]:border-primary rounded-none border-b-2 border-transparent px-4 py-2 data-[state=active]:shadow-none"
-                  >
-                    Contacts ({application.hr_contacts?.length || 0})
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="notes"
-                    className="data-[state=active]:border-primary rounded-none border-b-2 border-transparent px-4 py-2 data-[state=active]:shadow-none"
-                  >
-                    Notes ({application.notes?.length || 0})
-                  </TabsTrigger>
-                </TabsList>
+              <div className="border-b">
+                <ScrollArea className="w-full overflow-x-hidden">
+                  <div className="h-auto px-6">
+                    <TabsList className="flex w-max justify-start space-x-6 rounded-none bg-transparent p-0">
+                      <TabsTrigger
+                        value="details"
+                        className="data-[state=active]:border-primary rounded-none border-b-2 border-transparent px-4 py-2 data-[state=active]:shadow-none"
+                      >
+                        Details
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="timeline"
+                        className="data-[state=active]:border-primary rounded-none border-b-2 border-transparent px-4 py-2 data-[state=active]:shadow-none"
+                      >
+                        Timeline
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="contacts"
+                        className="data-[state=active]:border-primary rounded-none border-b-2 border-transparent px-4 py-2 data-[state=active]:shadow-none"
+                      >
+                        Contacts ({application.hr_contacts?.length || 0})
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="notes"
+                        className="data-[state=active]:border-primary rounded-none border-b-2 border-transparent px-4 py-2 data-[state=active]:shadow-none"
+                      >
+                        Notes ({application.notes?.length || 0})
+                      </TabsTrigger>
+                    </TabsList>
+                  </div>
+                  <ScrollBar orientation="horizontal" className="invisible" />
+                </ScrollArea>
               </div>
+              {/* Rest of your TabsContent goes here */}
 
               <ScrollArea className="flex-1 p-6">
                 <TabsContent value="details" className="mt-0 space-y-6">
@@ -185,13 +191,11 @@ export function ApplicationDetailDialog({ applicationId, open, onOpenChange }) {
                     {application.notes?.length > 0 ? (
                       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                         {application.notes.map((note) => (
-                          <div
+                          <Link
                             key={note.id}
-                            onClick={() => {
-                              onOpenChange(false);
-                              window.location.href = `/dashboard/keynotes?noteId=${note.id}`;
-                            }}
-                            className="hover:border-primary/50 bg-card cursor-pointer rounded-xl border p-4 shadow-sm transition-colors"
+                            href={`/dashboard/keynotes?noteId=${note.id}`}
+                            onClick={() => onOpenChange(false)}
+                            className="hover:border-primary/50 bg-card block cursor-pointer rounded-xl border p-4 shadow-sm transition-colors"
                           >
                             <h4 className="mb-1 line-clamp-1 text-sm font-medium">
                               {note.title || 'Untitled Note'}
@@ -199,7 +203,7 @@ export function ApplicationDetailDialog({ applicationId, open, onOpenChange }) {
                             <p className="text-muted-foreground text-xs">
                               Modified: {new Date(note.modified).toLocaleDateString()}
                             </p>
-                          </div>
+                          </Link>
                         ))}
                       </div>
                     ) : (
@@ -213,8 +217,8 @@ export function ApplicationDetailDialog({ applicationId, open, onOpenChange }) {
             </Tabs>
           </>
         )}
-      </DialogContent>
-    </Dialog>
+      </SheetContent>
+    </Sheet>
   );
 }
 

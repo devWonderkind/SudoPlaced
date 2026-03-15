@@ -30,6 +30,14 @@ import { FormDialog } from '@/components/shared/form-dialog';
 import { StatusManager } from './status-manager';
 import { ApplicationDetailDialog } from './application-detail-dialog';
 import KanbanBoard from '@/components/kanbanBoard';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function ApplicationsPage() {
   const [viewMode, setViewMode] = useState('table');
@@ -153,11 +161,13 @@ export default function ApplicationsPage() {
   };
 
   return (
-    <div className="w-full mx-auto max-w-7xl space-y-6">
+    <div className="mx-auto w-full max-w-7xl space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Applications</h1>
-        <p className="text-sm text-muted-foreground">Manage your job applications and track progress.</p>
+        <p className="text-muted-foreground text-sm">
+          Manage your job applications and track progress.
+        </p>
       </div>
       <div className="flex flex-col flex-wrap items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex items-center gap-2">
@@ -211,49 +221,52 @@ export default function ApplicationsPage() {
       )}
 
       {/* Form Dialog */}
-      <FormDialog
-        open={isDialogOpen}
-        onOpenChange={setIsDialogOpen}
-        title={selectedApplication ? 'Edit Application' : 'New Application'}
-        description={
-          selectedApplication ? 'Update application details.' : 'Add a new job application.'
-        }
-      >
-        <ApplicationForm
-          applicationId={selectedApplication?.id}
-          defaultValues={
-            selectedApplication
-              ? {
-                ...selectedApplication,
-                status: selectedApplication.status?.toString() || '',
-              }
-              : {
-                role_title: '',
-                company_name: '',
-                status: '',
-                work_mode: 'Remote',
-                expected_salary: '',
-                job_url: '',
-                company_logo: '',
-                location: '',
-                applied_on: new Date().toISOString().split('T')[0],
-                hr_contact_ids: [],
-              }
-          }
-          onSubmit={(data) => {
-            const payload = {
-              ...data,
-              // Handle empty string or null status
-              status:
-                data.status === '' || data.status === undefined || data.status === 'undefined'
-                  ? null
-                  : parseInt(data.status),
-            };
-            selectedApplication ? handleUpdate(payload) : handleCreate(payload);
-          }}
-          isSubmitting={isSubmitting}
-        />
-      </FormDialog>
+      <Sheet open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <SheetContent side="right" className="w-full overflow-y-auto p-2 sm:max-w-[540px] sm:p-4">
+          <SheetHeader className="">
+            <SheetTitle>{selectedApplication ? 'Edit Application' : 'New Application'}</SheetTitle>
+            {/* <SheetDescription>
+              {selectedApplication ? 'Update application details.' : 'Add a new job application.'}
+            </SheetDescription> */}
+          </SheetHeader>
+          <hr />
+          <ScrollArea className="-mr-4 h-full w-full flex-1 overflow-y-auto pr-4">
+            <div className="py-2">
+              <ApplicationForm
+                applicationId={selectedApplication?.id}
+                defaultValues={
+                  selectedApplication
+                    ? {
+                        ...selectedApplication,
+                        status: selectedApplication.status?.toString() || '',
+                      }
+                    : {
+                        role_title: '',
+                        company_name: '',
+                        status: '',
+                        work_mode: 'Remote',
+                        expected_salary: '',
+                        job_url: '',
+                        company_logo: '',
+                        location: '',
+                        applied_on: new Date().toISOString().split('T')[0],
+                        hr_contact_ids: [],
+                      }
+                }
+                onSubmit={(data) => {
+                  const payload = {
+                    ...data,
+                    status:
+                      !data.status || data.status === 'undefined' ? null : parseInt(data.status),
+                  };
+                  selectedApplication ? handleUpdate(payload) : handleCreate(payload);
+                }}
+                isSubmitting={isSubmitting}
+              />
+            </div>
+          </ScrollArea>
+        </SheetContent>
+      </Sheet>
 
       {/* Detail Dialog */}
       <ApplicationDetailDialog
