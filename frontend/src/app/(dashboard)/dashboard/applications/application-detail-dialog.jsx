@@ -26,6 +26,7 @@ import {
   ExternalLink,
   Loader2,
 } from 'lucide-react';
+import Link from 'next/link';
 
 export function ApplicationDetailDialog({ applicationId, open, onOpenChange }) {
   const { data: application, isLoading } = useQuery({
@@ -45,7 +46,7 @@ export function ApplicationDetailDialog({ applicationId, open, onOpenChange }) {
           </div>
         ) : (
           <>
-            <DialogHeader className="p-6 pb-2 m-4">
+            <DialogHeader className="m-4 p-6 pb-2">
               <div className="flex items-start gap-4">
                 <Avatar className="h-16 w-16 border bg-white shadow-sm">
                   <AvatarImage src={application.company_logo} className="object-contain p-2" />
@@ -149,9 +150,13 @@ export function ApplicationDetailDialog({ applicationId, open, onOpenChange }) {
                           <AvatarFallback>{contact?.first_name[0]}</AvatarFallback>
                         </Avatar>
                         <div>
-                          <div className="font-medium">{contact?.first_name} {contact?.last_name}</div>
+                          <div className="font-medium">
+                            {contact?.first_name} {contact?.last_name}
+                          </div>
                           <div className="text-muted-foreground text-sm">{contact?.company}</div>
-                          <div className="text-muted-foreground text-xs">{contact?.designation}</div>
+                          <div className="text-muted-foreground text-xs">
+                            {contact?.designation}
+                          </div>
                         </div>
                       </div>
                     ))
@@ -162,40 +167,43 @@ export function ApplicationDetailDialog({ applicationId, open, onOpenChange }) {
 
                 <TabsContent value="notes" className="mt-0">
                   <div className="flex flex-col gap-4">
-                    <div className="flex justify-between items-center bg-muted/20 p-3 rounded-lg border border-border/50">
-                      <p className="text-sm text-muted-foreground">Keynotes linked to this application</p>
-                      <Button 
-                        size="sm" 
-                        variant="secondary"
-                        onClick={() => {
-                          onOpenChange(false);
-                          window.location.href = `/dashboard/keynotes?applicationId=${application.id}&noteId=new`;
-                        }}
+                    <div className="bg-muted/20 border-border/50 flex items-center justify-between rounded-lg border p-3">
+                      <p className="text-muted-foreground text-sm">
+                        Keynotes linked to this application
+                      </p>
+                      <Link
+                        href={`/dashboard/keynotes?applicationId=${application.id}&noteId=new`}
+                        onClick={() => onOpenChange(false)}
+                        className="no-underline"
                       >
-                        Add Keynote
-                      </Button>
+                        <Button size="sm" variant="secondary">
+                          Add Keynote
+                        </Button>
+                      </Link>
                     </div>
 
                     {application.notes?.length > 0 ? (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                         {application.notes.map((note) => (
-                          <div 
-                            key={note.id} 
+                          <div
+                            key={note.id}
                             onClick={() => {
-                                onOpenChange(false);
-                                window.location.href = `/dashboard/keynotes?noteId=${note.id}`;
+                              onOpenChange(false);
+                              window.location.href = `/dashboard/keynotes?noteId=${note.id}`;
                             }}
-                            className="p-4 border rounded-xl hover:border-primary/50 cursor-pointer transition-colors bg-card shadow-sm"
+                            className="hover:border-primary/50 bg-card cursor-pointer rounded-xl border p-4 shadow-sm transition-colors"
                           >
-                            <h4 className="font-medium text-sm line-clamp-1 mb-1">{note.title || 'Untitled Note'}</h4>
-                            <p className="text-xs text-muted-foreground">
+                            <h4 className="mb-1 line-clamp-1 text-sm font-medium">
+                              {note.title || 'Untitled Note'}
+                            </h4>
+                            <p className="text-muted-foreground text-xs">
                               Modified: {new Date(note.modified).toLocaleDateString()}
                             </p>
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <div className="text-center py-8">
+                      <div className="py-8 text-center">
                         <p className="text-muted-foreground text-sm">No keynotes yet.</p>
                       </div>
                     )}
