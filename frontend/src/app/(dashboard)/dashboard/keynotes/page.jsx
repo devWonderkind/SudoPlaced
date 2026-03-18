@@ -7,6 +7,16 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
 import {
   IconNotebook,
@@ -36,6 +46,9 @@ function KeynotesContent() {
   const [noteTitle, setNoteTitle] = useState('');
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
+
+  const [noteToDelete, setNoteToDelete] = useState(null);
 
   // Initial load
   useEffect(() => {
@@ -61,22 +74,33 @@ function KeynotesContent() {
       if (id !== 'new') {
         const note = notes.find((n) => n.id.toString() === id);
         if (note) {
-          setSelectedNote(note);
-          setNoteTitle(note.title || 'Untitled Note');
-          setEditorContent(note.content_json || []);
+          setSelectedNote((prev) => {
+            if (prev?.id?.toString() !== id) {
+              setNoteTitle(note.title || 'Untitled Note');
+              setEditorContent(note.content_json || []);
+              setIsDirty(false);
+            }
+            return note;
+          });
         } else if (!loadingNotes) {
           fetchSingleNote(id);
         }
       } else {
-        setSelectedNote(null);
-        setNoteTitle('');
-        setEditorContent(undefined);
+        setSelectedNote((prev) => {
+          if (prev !== null) {
+            setNoteTitle('');
+            setEditorContent(undefined);
+            setIsDirty(false);
+          }
+          return null;
+        });
       }
     } else {
       setSelectedNoteId(null);
       setSelectedNote(null);
       setEditorContent(undefined);
       setNoteTitle('');
+      setIsDirty(false);
     }
   }, [searchParams, notes, loadingNotes]);
 
@@ -88,6 +112,7 @@ function KeynotesContent() {
         setSelectedNote(note);
         setNoteTitle(note.title || 'Untitled Note');
         setEditorContent(note.content_json || []);
+        setIsDirty(false);
       }
     } catch (error) {
       console.error(error);
@@ -97,9 +122,13 @@ function KeynotesContent() {
   const handleEditorChange = useCallback((content) => {
     setEditorContent(content);
     setSaved(false);
+    setIsDirty(true);
   }, []);
 
-  const handleSave = async () => {
+  const handleSave = async (isAutoSave = false) => {
+    // Prevent empty note creation on auto-save
+    if (isAutoSave && selectedNoteId === 'new' && (!noteTitle.trim() && !editorContent)) return;
+
     setSaving(true);
     try {
       const payload = {
@@ -116,36 +145,57 @@ function KeynotesContent() {
         if (appId) payload.application_id = appId;
 
         const res = await createNote(payload);
-        toast.success('Note created successfully!');
+        if (!isAutoSave) toast.success('Note created successfully!');
+        setIsDirty(false);
+        setSaved(true);
         router.replace(`/dashboard/keynotes?noteId=${res.id}`);
         fetchNotes();
+        setTimeout(() => setSaved(false), 2500);
       } else {
         await updateNote(selectedNoteId, payload);
-        toast.success('Note saved successfully!');
+        if (!isAutoSave) toast.success('Note saved successfully!');
+        setIsDirty(false);
         setSaved(true);
-        fetchNotes();
+        fetchNotes(); // You might want to omit fetchNotes on auto save if it causes UI jumps, but it's safe for now.
         setTimeout(() => setSaved(false), 2500);
       }
     } catch (error) {
-      toast.error('Failed to save note');
+      if (!isAutoSave) toast.error('Failed to save note');
     } finally {
       setSaving(false);
     }
   };
 
-  const handleDelete = async (id, e) => {
+  // Auto-save logic
+  useEffect(() => {
+    if (!isDirty || !selectedNoteId) return;
+
+    const timer = setTimeout(() => {
+      handleSave(true);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [noteTitle, editorContent, isDirty, selectedNoteId]);
+
+  const handleDeleteClick = (id, e) => {
     if (e) e.stopPropagation();
-    if (!confirm('Are you sure you want to delete this note?')) return;
+    setNoteToDelete(id);
+  };
+
+  const confirmDelete = async () => {
+    if (!noteToDelete) return;
 
     try {
-      await deleteNote(id);
+      await deleteNote(noteToDelete);
       toast.success('Note deleted successfully!');
       fetchNotes();
-      if (selectedNoteId === id.toString()) {
+      if (selectedNoteId === noteToDelete.toString()) {
         handleBack();
       }
     } catch (error) {
-      toast.success('Failed to delete note');
+      toast.error('Failed to delete note');
+    } finally {
+      setNoteToDelete(null);
     }
   };
 
@@ -169,7 +219,7 @@ function KeynotesContent() {
           <div className="flex w-full items-center gap-3 sm:w-auto">
             <button
               onClick={handleBack}
-              className="border-border hover:bg-muted shrink-0 rounded-lg border p-2 transition-colors"
+              className="border-border hover:bg-muted shrink-0 rounded-lg border p-2 transition-colors cursor-pointer"
               title="Go back"
             >
               <IconArrowLeft size={18} className="text-muted-foreground" />
@@ -179,6 +229,7 @@ function KeynotesContent() {
               onChange={(e) => {
                 setNoteTitle(e.target.value);
                 setSaved(false);
+                setIsDirty(true);
               }}
               placeholder="Note Title..."
               className="focus-visible:border-border h-auto w-full border-transparent bg-transparent px-2 py-1 text-xl font-bold shadow-none focus-visible:ring-0 sm:w-[300px]"
@@ -189,7 +240,7 @@ function KeynotesContent() {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => handleDelete(selectedNoteId)}
+                onClick={() => handleDeleteClick(selectedNoteId)}
                 className="text-destructive hover:text-destructive hover:bg-destructive/10"
               >
                 <IconTrash size={18} />
@@ -198,11 +249,10 @@ function KeynotesContent() {
             <Button
               onClick={handleSave}
               disabled={saving}
-              className={`relative overflow-hidden transition-all duration-300 ${
-                saved
-                  ? 'bg-emerald-500 text-white hover:bg-emerald-600'
-                  : 'bg-indigo-600 text-white hover:bg-indigo-700'
-              }`}
+              className={`relative overflow-hidden transition-all duration-300 ${saved
+                ? 'bg-emerald-500 text-white hover:bg-emerald-600'
+                : 'bg-indigo-600 text-white hover:bg-indigo-700'
+                }`}
             >
               {saving ? (
                 <>
@@ -256,9 +306,9 @@ function KeynotesContent() {
 
         {/* Editor Section */}
         <Card className="border-border/60 flex min-h-[60vh] flex-1 flex-col overflow-hidden border shadow-sm">
-          <div className="border-border/60 bg-muted/30 flex items-center justify-between border-b px-4 py-2">
+          <div className="border-border/60 flex items-center justify-between border-b px-4 py-2">
             <div className="text-muted-foreground flex items-center gap-2 text-sm font-medium">
-              <IconSparkles size={16} className="text-indigo-500" />
+              <IconSparkles size={16} className="text-amber-600" />
               Notes Editor
             </div>
             <span className="text-muted-foreground/60 text-xs">Use '/' for commands</span>
@@ -267,10 +317,37 @@ function KeynotesContent() {
             <Editor
               key={selectedNoteId}
               onChange={handleEditorChange}
-              initialContent={selectedNoteId === 'new' ? undefined : selectedNote?.content_json}
+              initialContent={
+                selectedNoteId === 'new'
+                  ? undefined
+                  : (selectedNote?.content_json && Array.isArray(selectedNote.content_json) && selectedNote.content_json.length === 0)
+                    ? undefined
+                    : selectedNote?.content_json
+              }
             />
           </CardContent>
         </Card>
+
+        {/* Delete Confirmation Dialog */}
+        <AlertDialog open={!!noteToDelete} onOpenChange={(open) => !open && setNoteToDelete(null)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete your note.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={confirmDelete}
+                className="bg-red-700 hover:bg-red-600 text-white"
+              >
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     );
   }
@@ -288,7 +365,7 @@ function KeynotesContent() {
             Manage your interview notes, technical concepts, and personal takeaways.
           </p>
         </div>
-        <Button onClick={handleCreateNew} className="bg-indigo-600 text-white hover:bg-indigo-700">
+        <Button onClick={handleCreateNew}>
           <IconPlus size={16} className="mr-1 hidden sm:block" />
           New Note
         </Button>
@@ -327,10 +404,10 @@ function KeynotesContent() {
               onClick={() => handleSelectNote(note.id)}
               className="group block cursor-pointer"
             >
-              <Card className="border-border bg-card relative flex h-full flex-col overflow-hidden border shadow-sm transition-all duration-300 hover:border-indigo-500/30 hover:shadow-md">
+              <Card className="border-border bg-card relative flex h-full flex-col overflow-hidden border shadow-sm transition-all duration-300 hover:shadow-md">
                 <CardContent className="flex flex-1 flex-col gap-3 p-5">
                   <div className="flex items-start justify-between">
-                    <h3 className="text-foreground line-clamp-2 text-lg leading-tight font-semibold">
+                    <h3 className="text-foreground line-clamp-2 text-lg leading-tight font-semibold">hover:border-indigo-500/30
                       {note.title || 'Untitled Note'}
                     </h3>
                     {note.application_details && (
@@ -367,7 +444,7 @@ function KeynotesContent() {
                       variant="ghost"
                       size="icon"
                       className="text-destructive hover:bg-destructive/10 hover:text-destructive h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
-                      onClick={(e) => handleDelete(note.id, e)}
+                      onClick={(e) => handleDeleteClick(note.id, e)}
                     >
                       <IconTrash size={14} />
                     </Button>
@@ -378,6 +455,27 @@ function KeynotesContent() {
           ))}
         </div>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!noteToDelete} onOpenChange={(open) => !open && setNoteToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete your note.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDelete}
+              className="bg-red-700 hover:bg-red-600 text-white"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
