@@ -10,7 +10,9 @@ export default function BlockNoteEditor({ initialContent, onChange, editable = t
     const { resolvedTheme } = useTheme();
 
     const editor = useCreateBlockNote({
-        initialContent: initialContent || undefined,
+        initialContent: (Array.isArray(initialContent) && initialContent.length === 0) 
+            ? undefined 
+            : (initialContent || undefined),
     });
 
     return (

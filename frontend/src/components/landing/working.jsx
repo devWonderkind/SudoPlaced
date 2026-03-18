@@ -248,6 +248,13 @@ const OfferPanel = ({ isInView }) => {
   const [phase, setPhase] = useState(0);
   const TARGET = 185000;
 
+  const confettiItems = React.useMemo(() =>
+    Array.from({ length: 10 }).map((_, i) => ({
+      x: `${50 + (Math.random() - 0.5) * 80}%`,
+      y: `${20 + Math.random() * 60}%`,
+      rotate: Math.random() * 360,
+    })), []);
+
   useEffect(() => {
     if (!isInView) return;
     let c = false;
@@ -287,10 +294,10 @@ const OfferPanel = ({ isInView }) => {
       <AnimatePresence>
         {phase >= 2 && (
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            {Array.from({ length: 10 }).map((_, i) => (
+            {confettiItems.map((item, i) => (
               <motion.div key={i}
                 initial={{ opacity: 1, x: '50%', y: '40%', scale: 0 }}
-                animate={{ opacity: [1, 0], x: `${50 + (Math.random() - 0.5) * 80}%`, y: `${20 + Math.random() * 60}%`, scale: [0, 1], rotate: Math.random() * 360 }}
+                animate={{ opacity: [1, 0], x: item.x, y: item.y, scale: [0, 1], rotate: item.rotate }}
                 transition={{ duration: 1.3, delay: i * 0.04 }}
                 className={`absolute w-1.5 h-1.5 rounded-full ${['bg-blue-400', 'bg-purple-400', 'bg-green-400', 'bg-yellow-400', 'bg-pink-400'][i % 5]}`} />
             ))}
@@ -415,7 +422,7 @@ export default function HowItWorks() {
             whileInView={{ opacity: 1 }}
             className="text-blue-500 text-sm font-mono tracking-widest uppercase"
           >
-            // How it works
+            <span>// How it works</span>
           </motion.span>
           <h2 className="text-4xl md:text-6xl font-bold text-neutral-900 dark:text-white tracking-tighter mb-6">
             Four steps to <br />
