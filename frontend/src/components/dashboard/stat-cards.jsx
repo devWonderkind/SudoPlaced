@@ -1,19 +1,18 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   IconFileAnalytics,
   IconCalendarEvent,
   IconLoader2,
 } from "@tabler/icons-react";
+import { getApplications } from "@/api/applications";
 
-const stats = [
+const cardConfig = [
   {
     title: "Total Applications",
-    value: 128,
-    change: "+12%",
-    changeType: "positive",
+    key: "total",
     icon: IconFileAnalytics,
     gradient: "from-blue-500/10 to-indigo-500/10",
     iconBg: "bg-blue-500/10 dark:bg-blue-500/20",
@@ -21,9 +20,7 @@ const stats = [
   },
   {
     title: "Interview Scheduled",
-    value: 24,
-    change: "+3",
-    changeType: "positive",
+    key: "interviews",
     icon: IconCalendarEvent,
     gradient: "from-violet-500/10 to-purple-500/10",
     iconBg: "bg-violet-500/10 dark:bg-violet-500/20",
@@ -31,9 +28,7 @@ const stats = [
   },
   {
     title: "In Progress",
-    value: 42,
-    change: "Active",
-    changeType: "neutral",
+    key: "inProgress",
     icon: IconLoader2,
     gradient: "from-amber-500/10 to-orange-500/10",
     iconBg: "bg-amber-500/10 dark:bg-amber-500/20",
@@ -42,9 +37,43 @@ const stats = [
 ];
 
 export default function StatCards() {
+  const [stats, setStats] = useState({ total: 0, interviews: 0, inProgress: 0 });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const data = await getApplications();
+        const applications = Array.isArray(data) ? data : (data?.results ?? []);
+
+        const total = applications.length;
+
+        // Count applications with upcoming interview_date
+        const now = new Date();
+        const interviews = applications.filter(
+          (app) => app.interview_date && new Date(app.interview_date) >= now
+        ).length;
+
+        // "In Progress" = not Rejected, not Offered, not Ghosted (active pipeline)
+        const endStatuses = ["Rejected", "Offered", "Ghosted", "Bookmarked"];
+        const inProgress = applications.filter(
+          (app) => app.status_label && !endStatuses.includes(app.status_label)
+        ).length;
+
+        setStats({ total, interviews, inProgress });
+      } catch (err) {
+        console.error("Failed to load stat cards:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {stats.map((item, index) => (
+      {cardConfig.map((item, index) => (
         <Card
           key={index}
           className="group relative overflow-hidden border border-border/50 bg-card/80 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-300 hover:border-border py-0"
@@ -67,16 +96,12 @@ export default function StatCards() {
               </p>
               <div className="flex items-baseline gap-2 mt-0.5">
                 <h2 className="text-2xl font-bold tracking-tight">
-                  {item.value}
+                  {loading ? (
+                    <span className="inline-block w-8 h-6 bg-muted animate-pulse rounded" />
+                  ) : (
+                    stats[item.key]
+                  )}
                 </h2>
-                {/* <span
-                  className={`text-xs font-medium ${item.changeType === "positive"
-                    ? "text-emerald-600 dark:text-emerald-400"
-                    : "text-muted-foreground"
-                    }`}
-                >
-                  {item.change}
-                </span> */}
               </div>
             </div>
           </CardContent>

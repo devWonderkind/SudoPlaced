@@ -407,7 +407,7 @@ function KeynotesContent() {
               <Card className="border-border bg-card relative flex h-full flex-col overflow-hidden border shadow-sm transition-all duration-300 hover:shadow-md">
                 <CardContent className="flex flex-1 flex-col gap-3 p-5">
                   <div className="flex items-start justify-between">
-                    <h3 className="text-foreground line-clamp-2 text-lg leading-tight font-semibold">hover:border-indigo-500/30
+                    <h3 className="text-foreground line-clamp-2 text-lg leading-tight font-semibold">
                       {note.title || 'Untitled Note'}
                     </h3>
                     {note.application_details && (
@@ -415,7 +415,7 @@ function KeynotesContent() {
                         variant="secondary"
                         className="shrink-0 rounded-md border-indigo-200 bg-indigo-50 px-1.5 py-0 text-[10px] text-indigo-700 dark:border-indigo-800 dark:bg-indigo-950/50 dark:text-indigo-300"
                       >
-                        App Linked
+                        Application Linked
                       </Badge>
                     )}
                   </div>

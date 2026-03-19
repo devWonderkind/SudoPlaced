@@ -1,20 +1,31 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import { Badge } from "@/components/ui/badge";
-
-// Sample dates with events (interviews scheduled)
-const eventDates = [
-  new Date(2026, 2, 12),
-  new Date(2026, 2, 15),
-  new Date(2026, 2, 18),
-  new Date(2026, 2, 22),
-];
+import { getApplications } from "@/api/applications";
 
 export default function DashboardCalendar() {
   const [date, setDate] = useState(new Date());
+  const [eventDates, setEventDates] = useState([]);
+
+  useEffect(() => {
+    const fetchInterviewDates = async () => {
+      try {
+        const data = await getApplications();
+        const all = Array.isArray(data) ? data : (data?.results ?? []);
+        const dates = all
+          .filter((app) => app.interview_date)
+          .map((app) => new Date(app.interview_date));
+        setEventDates(dates);
+      } catch (err) {
+        console.error("Failed to fetch interview dates:", err);
+      }
+    };
+
+    fetchInterviewDates();
+  }, []);
 
   return (
     <Card className="border border-border/50 bg-card/80 backdrop-blur-sm shadow-sm py-0 h-full">
