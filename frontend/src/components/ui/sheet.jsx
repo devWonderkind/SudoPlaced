@@ -71,9 +71,6 @@ function SheetContent({
           className
         )}
         {...props}>
-        <VisuallyHidden.Root>
-          <SheetPrimitive.Title>Sheet</SheetPrimitive.Title>
-        </VisuallyHidden.Root>
         {children}
         {showCloseButton && (
           <SheetPrimitive.Close
