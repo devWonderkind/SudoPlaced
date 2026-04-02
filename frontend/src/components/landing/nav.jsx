@@ -35,6 +35,9 @@ export default function Navbar() {
           <Link href="#how-it-works" className="px-4 py-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-900/5 dark:text-neutral-300 dark:hover:text-white dark:hover:bg-white/10 rounded-full transition-all duration-200 text-sm font-medium">
             How It Works
           </Link>
+          <Link href="#faq" className="px-4 py-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-900/5 dark:text-neutral-300 dark:hover:text-white dark:hover:bg-white/10 rounded-full transition-all duration-200 text-sm font-medium">
+            FAQ
+          </Link>
           <Link href="/login" className='cursor-pointer'>
             <Button>
               Login
